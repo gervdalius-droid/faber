@@ -198,6 +198,8 @@ section{padding:78px 0}
 .price .seats{display:inline-block;font-size:12.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:3px 11px;border-radius:999px;margin-bottom:6px}
 .price-alt{display:block;text-align:center;margin-top:11px;font-size:13px;color:var(--muted);cursor:pointer}
 .price-alt:hover{color:var(--accent);text-decoration:underline}
+.price .save{display:inline-block;font-size:12.5px;font-weight:700;color:var(--green);background:var(--green-bg);padding:4px 11px;border-radius:999px;margin:2px 0 6px}
+.price .was{font-size:14px;color:var(--hint);text-decoration:line-through;font-weight:500;margin-left:8px}
 
 /* Band */
 .band{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:24px;padding:54px;text-align:center;box-shadow:0 20px 50px rgba(37,99,235,.35)}
@@ -541,41 +543,56 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow" data-i18n="price.eyebrow">Kainos</span>
-      <h2 data-i18n="price.h2">Pasirinkite planą ir pradėkite</h2>
-      <p data-i18n="price.sub">Pilna sistema — Nesting + Gamybos valdymas. Be sutarčių, atsisakykite bet kada.</p>
+      <h2 data-i18n="price.h2">Pasirinkite, ko reikia</h2>
+      <p data-i18n="price.sub">Pirkite atskirą programą arba visą sistemą. Komplekte — daugiau už mažiau.</p>
     </div>
-    <div class="prices two">
+    <div class="prices">
       <div class="price reveal">
-        <h3 data-i18n="price.t1.name">Pradžia</h3>
-        <span class="seats" data-i18n="price.t1.seats">iki 3 vietų</span>
-        <div class="amt" data-price="start"></div>
+        <h3 data-i18n="pp.nest.name">Nesting</h3>
+        <span class="seats" data-i18n="price.seats5">iki 5 vietų</span>
+        <div class="amt" data-price="nest"></div>
         <ul>
-          <li data-i18n="price.t1.l1">Nesting + Gamybos valdymas</li>
-          <li data-i18n="price.t1.l2">Iki 3 vartotojų</li>
-          <li data-i18n="price.t1.l3">Bendras sandėlis ir duomenys</li>
-          <li data-i18n="price.t1.l4">QR / Zebra etiketės</li>
-          <li data-i18n="price.t1.l5">Debesis ir atnaujinimai</li>
+          <li data-i18n="pp.nest.l1">Pjovimo optimizavimas (true-shape)</li>
+          <li data-i18n="pp.nest.l2">SWOOD importas, DXF į CNC</li>
+          <li data-i18n="pp.nest.l3">QR / Zebra etiketės</li>
+          <li data-i18n="pp.nest.l4">Atraižų ir likučių apskaita</li>
+          <li data-i18n="pp.nest.l5">Iki 5 vartotojų</li>
         </ul>
-        <a class="btn btn-ghost" data-buy="start" data-i18n="price.buy">Pirkti</a>
+        <a class="btn btn-ghost" data-buy="nest" data-i18n="price.buy">Pirkti</a>
+        <a class="price-alt" data-link="demo" data-i18n="price.ordemo">arba užsisakyti demo</a>
+      </div>
+      <div class="price reveal">
+        <h3 data-i18n="pp.prod.name">Gamybos valdymas</h3>
+        <span class="seats" data-i18n="price.seats5">iki 5 vietų</span>
+        <div class="amt" data-price="prod"></div>
+        <ul>
+          <li data-i18n="pp.prod.l1">Projektai, užduotys, etapai</li>
+          <li data-i18n="pp.prod.l2">Kanban, Gantt, pipeline</li>
+          <li data-i18n="pp.prod.l3">Sandėlis ir medžiagų poreikis</li>
+          <li data-i18n="pp.prod.l4">Excel importas, PDF, ataskaitos</li>
+          <li data-i18n="pp.prod.l5">Iki 5 vartotojų</li>
+        </ul>
+        <a class="btn btn-ghost" data-buy="prod" data-i18n="price.buy">Pirkti</a>
         <a class="price-alt" data-link="demo" data-i18n="price.ordemo">arba užsisakyti demo</a>
       </div>
       <div class="price feat reveal">
-        <span class="pop" data-i18n="price.popular">Populiariausia</span>
-        <h3 data-i18n="price.t2.name">Komanda</h3>
-        <span class="seats" data-i18n="price.t2.seats">iki 5 vietų</span>
-        <div class="amt" data-price="team"></div>
+        <span class="pop" data-i18n="price.bestvalue">Geriausia vertė</span>
+        <h3 data-i18n="pp.suite.name">Visa sistema</h3>
+        <span class="seats" data-i18n="price.seats5">iki 5 vietų</span>
+        <div class="amt" data-price="suite"></div>
+        <span class="save" data-save></span>
         <ul>
-          <li data-i18n="price.t2.l1">Viskas, kas „Pradžia“ plane</li>
-          <li data-i18n="price.t2.l2">Iki 5 vartotojų</li>
-          <li data-i18n="price.t2.l3">Excel importas ir ataskaitos</li>
-          <li data-i18n="price.t2.l4">Pirmenybinis palaikymas</li>
-          <li data-i18n="price.t2.l5">Pagalba paleidžiant</li>
+          <li data-i18n="pp.suite.l1">Nesting + Gamybos valdymas</li>
+          <li data-i18n="pp.suite.l2">Bendras sandėlis (tik komplekte)</li>
+          <li data-i18n="pp.suite.l3">Pirmenybinis palaikymas</li>
+          <li data-i18n="pp.suite.l4">Pagalba paleidžiant</li>
+          <li data-i18n="pp.suite.l5">Iki 5 vartotojų</li>
         </ul>
-        <a class="btn btn-primary" data-buy="team" data-i18n="price.buy">Pirkti</a>
+        <a class="btn btn-primary" data-buy="suite" data-i18n="price.buy">Pirkti</a>
         <a class="price-alt" data-link="demo" data-i18n="price.ordemo">arba užsisakyti demo</a>
       </div>
     </div>
-    <p class="price-note" data-i18n="price.note">Po apmokėjimo iškart sukuriama paskyra — pradėkite dirbti tą pačią dieną. Kainos be PVM; metinis planas pigesnis. Reikia daugiau vietų? Užsisakykite demo.</p>
+    <p class="price-note" data-i18n="price.note">Pirkite atskirai arba komplekte. Po apmokėjimo iškart sukuriama paskyra — dirbkite tą pačią dieną. Kainos be PVM; metinis planas pigesnis.</p>
   </div>
 </section>
 
@@ -645,14 +662,15 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
 /* ===== Brand (edit here to rename everywhere) ===== */
 const BRAND = "FabSuite";
 
-/* ===== Pricing (monthly EUR per plan; "—" => "By quote") ===== */
-const PRICES = { start: "69", team: "99" };
+/* ===== Pricing (monthly EUR; up to 5 seats each). Bundle savings auto-calculated. ===== */
+const PRICES = { nest: "39", prod: "39", suite: "59" };
 
 /* ===== Self-serve links — fill in later (Stripe Payment Links, signup URL, etc.) =====
    Until a real "buy" URL is set (stays "#"), buy buttons fall back to the demo action. */
 const LINKS = {
-  buyStart: "#",   // 3-seat plan checkout (e.g. Stripe Payment Link)
-  buyTeam:  "#",   // 5-seat plan checkout
+  buyNest:  "#",   // Nesting app checkout (e.g. Stripe Payment Link)
+  buyProd:  "#",   // Production app checkout
+  buySuite: "#",   // Full-suite bundle checkout
   demo:     "mailto:gervdalius@gmail.com?subject=FabSuite%20demo"
 };
 
@@ -699,11 +717,12 @@ const I18N = {
   "how.s1.t":["Demo ir poreikių analizė","Demo & needs review"],"how.s1.d":["Parodome sistemą gyvai ir aptariame jūsų gamybos procesą.","We show the system live and review your production process."],
   "how.s2.t":["Pritaikymas ir duomenys","Setup & data"],"how.s2.d":["Sukonfigūruojame vartotojus, sandėlį ir importuojame jūsų duomenis.","We configure users, stock and import your data."],
   "how.s3.t":["Gamyba","Go live"],"how.s3.d":["Komanda dirba realiu laiku — su mokymais ir palaikymu.","Your team works in real time — with training and support."],
-  "price.eyebrow":["Kainos","Pricing"],"price.h2":["Pasirinkite planą ir pradėkite","Pick a plan and get started"],"price.sub":["Pilna sistema — Nesting + Gamybos valdymas. Be sutarčių, atsisakykite bet kada.","Full suite — Nesting + Production management. No contracts, cancel anytime."],
-  "price.from":["nuo","from"],"price.permo":["/mėn","/mo"],"price.popular":["Populiariausia","Most popular"],"price.buy":["Pirkti","Buy now"],"price.ordemo":["arba užsisakyti demo","or book a demo"],
-  "price.t1.name":["Pradžia","Starter"],"price.t1.seats":["iki 3 vietų","up to 3 seats"],"price.t1.l1":["Nesting + Gamybos valdymas","Nesting + Production management"],"price.t1.l2":["Iki 3 vartotojų","Up to 3 users"],"price.t1.l3":["Bendras sandėlis ir duomenys","Shared stock and data"],"price.t1.l4":["QR / Zebra etiketės","QR / Zebra labels"],"price.t1.l5":["Debesis ir atnaujinimai","Cloud & updates"],
-  "price.t2.name":["Komanda","Team"],"price.t2.seats":["iki 5 vietų","up to 5 seats"],"price.t2.l1":['Viskas, kas „Pradžia“ plane',"Everything in Starter"],"price.t2.l2":["Iki 5 vartotojų","Up to 5 users"],"price.t2.l3":["Excel importas ir ataskaitos","Excel import and reports"],"price.t2.l4":["Pirmenybinis palaikymas","Priority support"],"price.t2.l5":["Pagalba paleidžiant","Onboarding help"],
-  "price.note":["Po apmokėjimo iškart sukuriama paskyra — pradėkite dirbti tą pačią dieną. Kainos be PVM; metinis planas pigesnis. Reikia daugiau vietų? Užsisakykite demo.","Your account is created right after payment — start working the same day. Prices excl. VAT; annual is cheaper. Need more seats? Book a demo."],
+  "price.eyebrow":["Kainos","Pricing"],"price.h2":["Pasirinkite, ko reikia","Pick what you need"],"price.sub":["Pirkite atskirą programą arba visą sistemą. Komplekte — daugiau už mažiau.","Buy a single app or the full suite. The bundle gives more for less."],
+  "price.permo":["/mėn","/mo"],"price.bestvalue":["Geriausia vertė","Best value"],"price.buy":["Pirkti","Buy now"],"price.ordemo":["arba užsisakyti demo","or book a demo"],"price.seats5":["iki 5 vietų","up to 5 seats"],
+  "pp.nest.name":["Nesting","Nesting"],"pp.nest.l1":["Pjovimo optimizavimas (true-shape)","Cut optimization (true-shape)"],"pp.nest.l2":["SWOOD importas, DXF į CNC","SWOOD import, DXF to CNC"],"pp.nest.l3":["QR / Zebra etiketės","QR / Zebra labels"],"pp.nest.l4":["Atraižų ir likučių apskaita","Offcut & remnant tracking"],"pp.nest.l5":["Iki 5 vartotojų","Up to 5 users"],
+  "pp.prod.name":["Gamybos valdymas","Production management"],"pp.prod.l1":["Projektai, užduotys, etapai","Projects, tasks, steps"],"pp.prod.l2":["Kanban, Gantt, pipeline","Kanban, Gantt, pipeline"],"pp.prod.l3":["Sandėlis ir medžiagų poreikis","Stock & material needs"],"pp.prod.l4":["Excel importas, PDF, ataskaitos","Excel import, PDF, reports"],"pp.prod.l5":["Iki 5 vartotojų","Up to 5 users"],
+  "pp.suite.name":["Visa sistema","Full suite"],"pp.suite.l1":["Nesting + Gamybos valdymas","Nesting + Production management"],"pp.suite.l2":["Bendras sandėlis (tik komplekte)","Shared warehouse (bundle only)"],"pp.suite.l3":["Pirmenybinis palaikymas","Priority support"],"pp.suite.l4":["Pagalba paleidžiant","Onboarding help"],"pp.suite.l5":["Iki 5 vartotojų","Up to 5 users"],
+  "price.note":["Pirkite atskirai arba komplekte. Po apmokėjimo iškart sukuriama paskyra — dirbkite tą pačią dieną. Kainos be PVM; metinis planas pigesnis.","Buy separately or bundled. Your account is created right after payment — work the same day. Prices excl. VAT; annual is cheaper."],
   "cta.h2":["Pasiruošę pradėti?","Ready to start?"],"cta.p":["Pasirinkite planą, susikurkite paskyrą ir dirbkite jau šiandien.","Pick a plan, create your account, and work today."],"cta.b1":["Rinktis planą","Choose a plan"],"cta.b2":["Užsisakyti demo","Book a demo"],
   "con.eyebrow":["Demo","Demo"],"con.h2":["Užsisakykite nemokamą demo","Book a free demo"],"con.sub":["Norite pamatyti prieš pirkdami? Užpildykite formą — parodysime sistemą gyvai per 1 darbo dieną.","Want to see it before buying? Fill the form — we'll show it live within 1 business day."],"con.buy":["Pirkti iškart","Buy now"],"con.buyv":["Rinkitės planą ir pradėkite","Pick a plan and start"],"con.email":["El. paštas","Email"],"con.live":["Statusas","Status"],"con.livev":["Nesting ir Gamybos valdymas — jau veikia","Nesting and Production management — live now"],
   "form.name":["Vardas","Name"],"form.company":["Įmonė","Company"],"form.email":["El. paštas","Email"],"form.interest":["Dominantis produktas","Product of interest"],"form.opt.all":["Visa sistema","Whole suite"],"form.opt.nest":["Nesting","Nesting"],"form.opt.prod":["Gamybos valdymas","Production management"],"form.opt.soon":["Pasiūlymai / CRM","Offers / CRM"],"form.msg":["Žinutė","Message"],"form.send":["Siųsti užklausą","Send request"],
@@ -731,13 +750,19 @@ document.getElementById("langBtn").addEventListener("click",()=>{lang = lang==="
 function applyPrices(){
   const i = lang==="lt"?0:1;
   const quote = ["Pagal pasiūlymą","By quote"][i];
+  const per=I18N["price.permo"][i];
+  const sep = (+PRICES.nest) + (+PRICES.prod);          // both apps bought separately
+  const save = sep - (+PRICES.suite);                   // bundle saving / month
   document.querySelectorAll("[data-price]").forEach(el=>{
     const key=el.getAttribute("data-price");
-    const from=I18N["price.from"][i], per=I18N["price.permo"][i];
     const val = PRICES[key];
-    el.innerHTML = (val && val!=="—")
-      ? `<small>${from}</small> ${val} €<small>${per}</small>`
-      : `<span style="font-size:20px">${quote}</span>`;
+    if(!val || val==="—"){ el.innerHTML = `<span style="font-size:20px">${quote}</span>`; return; }
+    const was = (key==="suite" && save>0) ? `<span class="was">${sep} €</span>` : "";
+    el.innerHTML = `${val} €<small>${per}</small>${was}`;
+  });
+  document.querySelectorAll("[data-save]").forEach(el=>{
+    el.textContent = save>0 ? (i===0 ? `Sutaupote ${save} €/mėn` : `Save €${save}/mo`) : "";
+    el.style.display = save>0 ? "inline-block" : "none";
   });
 }
 
@@ -787,7 +812,7 @@ document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 
 /* Self-serve link wiring */
 function wireLinks(){
-  const buy={start:LINKS.buyStart, team:LINKS.buyTeam};
+  const buy={nest:LINKS.buyNest, prod:LINKS.buyProd, suite:LINKS.buySuite};
   document.querySelectorAll("[data-buy]").forEach(a=>{
     const url=buy[a.getAttribute("data-buy")];
     const live=url&&url!=="#";
