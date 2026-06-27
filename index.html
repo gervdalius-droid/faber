@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FabSuite — gamybos programinė įranga baldų ir gaminių gamykloms</title>
+<meta name="description" content="FabSuite — viena programinė įranga baldų ir gaminių gamybai: pjovimo optimizavimas (nesting), gamybos valdymas, sandėlis, etiketės ir ataskaitos. Vienos šeimos įrankiai jūsų cechui." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f3ef; --surface:#ffffff; --surface-2:#f0eee9;
+  --text:#1a1815; --muted:#6b6860; --hint:#8b867d;
+  --accent:#2563eb; --accent-2:#1d4ed8; --accent-soft:#eaf0ff;
+  --border:rgba(28,25,20,.09); --border-2:rgba(28,25,20,.14);
+  --shadow:0 1px 2px rgba(26,24,21,.04),0 10px 30px rgba(26,24,21,.07);
+  --green:#16a34a; --green-bg:#eafaf0; --amber:#d97706; --amber-bg:#fef3c7; --red:#dc2626;
+  --radius:16px; --font:"Inter",system-ui,-apple-system,sans-serif; --display:"Sora",var(--font);
+  --maxw:1140px;
+}
+html[data-theme="dark"]{
+  --bg:#111110; --surface:#1a1916; --surface-2:#211f1b;
+  --text:#e8e6e1; --muted:#a39d92; --hint:#7c766c;
+  --accent:#6f93ff; --accent-2:#8aa6ff; --accent-soft:#1a2336;
+  --border:rgba(255,255,255,.09); --border-2:rgba(255,255,255,.15);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 36px rgba(0,0,0,.45);
+  --green-bg:#10231a; --amber-bg:#2a1f0a;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.15;margin:0;letter-spacing:-.02em}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-family:var(--font);font-size:15px;padding:12px 20px;border-radius:12px;border:1px solid transparent;cursor:pointer;transition:transform .12s,box-shadow .2s,background .2s;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.28)}
+.btn-primary:hover{background:var(--accent-2);box-shadow:0 8px 22px rgba(37,99,235,.36)}
+.btn-ghost{background:transparent;color:var(--text);border-color:var(--border-2)}
+.btn-ghost:hover{background:var(--surface-2)}
+.muted{color:var(--muted)}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+
+/* Header */
+header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--border)}
+.nav{display:flex;align-items:center;gap:24px;height:66px}
+.logo{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.02em}
+.logo svg{width:32px;height:32px;border-radius:9px;box-shadow:0 4px 12px rgba(37,99,235,.3)}
+.nav-links{display:flex;gap:26px;margin-left:18px}
+.nav-links a{font-size:15px;font-weight:500;color:var(--muted);transition:color .15s}
+.nav-links a:hover{color:var(--text)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.icon-btn{height:38px;min-width:38px;padding:0 10px;border-radius:10px;border:1px solid var(--border-2);background:var(--surface);color:var(--text);cursor:pointer;font-size:14px;font-weight:600;display:grid;place-items:center;transition:background .15s}
+.icon-btn:hover{background:var(--surface-2)}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;padding:84px 0 64px}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(1100px 480px at 78% -12%,var(--accent-soft),transparent 60%);pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}
+.hero h1{font-size:clamp(34px,5vw,56px)}
+.hero h1 .grad{background:linear-gradient(120deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:clamp(17px,2.2vw,20px);color:var(--muted);margin:22px 0 30px;max-width:560px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.hero-trust{display:flex;gap:26px;margin-top:34px;flex-wrap:wrap}
+.hero-trust div{font-size:14px;color:var(--muted)}
+.hero-trust b{display:block;font-family:var(--display);font-size:23px;color:var(--text);font-weight:600}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);margin-bottom:22px;box-shadow:var(--shadow)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px var(--green-bg)}
+
+/* Generic app window */
+.appwin{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.appbar{display:flex;align-items:center;gap:7px;padding:11px 15px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.appbar i{width:11px;height:11px;border-radius:50%;background:var(--border-2)}
+.appbar .ttl{margin-left:8px;font-size:12.5px;color:var(--hint);font-family:var(--font);font-weight:500}
+.appbar .pill{margin-left:auto;font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:999px}
+
+/* Hero mock */
+.sheets{display:flex;gap:12px;padding:16px 16px 6px}
+.sheet{flex:1;aspect-ratio:1.36;border-radius:10px;border:1px solid var(--border);background:repeating-linear-gradient(45deg,transparent,transparent 9px,var(--surface-2) 9px,var(--surface-2) 18px);position:relative;overflow:hidden}
+.part{position:absolute;border-radius:5px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.kpis{display:flex;gap:10px;padding:10px 16px 16px}
+.kpi{flex:1;background:var(--surface-2);border-radius:10px;padding:11px 12px}
+.kpi small{font-size:10.5px;color:var(--hint);display:block;text-transform:uppercase;letter-spacing:.04em}
+.kpi b{font-family:var(--display);font-size:18px}
+
+/* Sections */
+section{padding:78px 0}
+.sec-head{text-align:center;max-width:680px;margin:0 auto 50px}
+.sec-head h2{font-size:clamp(27px,3.5vw,38px);margin:14px 0 14px}
+.sec-head p{color:var(--muted);font-size:17px;margin:0}
+
+/* Proof strip */
+.proof{padding:26px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface)}
+.proof .wrap{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;text-align:center}
+.proof .pt{font-size:14.5px;color:var(--muted)}
+.proof b{color:var(--text)}
+
+/* Products */
+.products{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow);position:relative;transition:transform .18s,box-shadow .2s}
+.pcard:hover{transform:translateY(-3px);box-shadow:0 16px 42px rgba(26,24,21,.12)}
+.pcard .picon{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;font-size:25px;background:var(--accent-soft);margin-bottom:16px}
+.pcard h3{font-size:21px;margin-bottom:5px}
+.pcard .ptag{font-size:12.5px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+.pcard ul{list-style:none;padding:0;margin:16px 0 0}
+.pcard li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;font-size:14.5px;color:var(--muted)}
+.pcard li::before{content:"✓";color:var(--green);font-weight:700;flex:none}
+.soon .picon{background:var(--surface-2)}
+.chip{position:absolute;top:22px;right:22px;font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:999px;background:var(--surface-2);color:var(--muted);border:1px solid var(--border-2)}
+.chip.live{background:var(--green-bg);color:var(--green);border-color:transparent}
+
+/* Demo / See it in action */
+.demo{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+.tab{padding:10px 18px;border-radius:999px;border:1px solid var(--border-2);background:var(--bg);color:var(--muted);font-weight:600;font-size:14.5px;cursor:pointer;transition:all .15s}
+.tab.active{background:var(--accent);color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(37,99,235,.28)}
+.panel{display:none;animation:fade .35s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.demo-body{padding:18px}
+.demo-split{display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
+.caption{text-align:center;color:var(--muted);font-size:14px;margin-top:16px}
+
+/* data tables in previews */
+.dtable{width:100%;border-collapse:collapse;font-size:13px}
+.dtable th{text-align:left;font-weight:600;color:var(--hint);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--border)}
+.dtable td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text)}
+.dtable td.mono,.dtable th.mono{font-variant-numeric:tabular-nums}
+.dtable tr:last-child td{border-bottom:none}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px}
+.tag.g{background:var(--green-bg);color:var(--green)}
+.tag.a{background:var(--amber-bg);color:var(--amber)}
+.tag.b{background:var(--accent-soft);color:var(--accent)}
+.bar{height:6px;border-radius:4px;background:var(--surface-2);overflow:hidden;min-width:54px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+
+/* Kanban */
+.kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kcol{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:10px}
+.kcol h4{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--hint);margin-bottom:10px;display:flex;justify-content:space-between}
+.kcol h4 span{background:var(--surface-2);border-radius:999px;padding:1px 8px;font-size:11px}
+.kcard{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:9px;box-shadow:0 1px 2px rgba(26,24,21,.05)}
+.kcard .kt{font-weight:600;font-size:13.5px;margin-bottom:3px}
+.kcard .kc{font-size:12px;color:var(--muted);margin-bottom:8px}
+.kcard .kf{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--hint)}
+.av{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center}
+
+/* Gantt */
+.gantt{margin-top:18px;border-top:1px solid var(--border);padding-top:16px}
+.gantt .gh{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--hint);margin-bottom:10px;font-weight:600}
+.gantt .ghead,.gantt .grow{display:grid;grid-template-columns:170px 1fr;align-items:center;gap:12px}
+.gantt .ghead .days{display:grid;grid-template-columns:repeat(5,1fr);font-size:10.5px;color:var(--hint);text-transform:uppercase;letter-spacing:.04em}
+.gantt .ghead .days span{text-align:center}
+.gantt .grow{margin-bottom:8px}
+.gantt .glabel{font-size:12.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gantt .gtrack{position:relative;height:24px;background:var(--bg);border-radius:7px;border:1px solid var(--border);background-image:repeating-linear-gradient(90deg,transparent,transparent calc(20% - 1px),var(--border) calc(20% - 1px),var(--border) 20%)}
+.gantt .gbar{position:absolute;top:3px;height:18px;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent-2));display:flex;align-items:center;padding:0 8px;font-size:10.5px;color:#fff;font-weight:600;overflow:hidden;box-shadow:0 2px 6px rgba(37,99,235,.3)}
+.gantt .gbar.g{background:linear-gradient(90deg,var(--green),#22b364)}
+.gantt .gbar.a{background:linear-gradient(90deg,var(--amber),#eb9b1e)}
+@media(max-width:560px){.gantt .ghead,.gantt .grow{grid-template-columns:110px 1fr;gap:8px}}
+
+/* Features */
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.fcard{padding:26px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);transition:border-color .2s,transform .18s}
+.fcard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.fcard .fi{font-size:24px;margin-bottom:12px}
+.fcard h3{font-size:17px;margin-bottom:6px}
+.fcard p{font-size:14.5px;color:var(--muted);margin:0}
+
+/* Integrations */
+.logos{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:8px}
+.logos span{padding:10px 18px;border:1px solid var(--border-2);border-radius:999px;background:var(--surface);font-weight:600;font-size:14.5px;color:var(--muted);box-shadow:var(--shadow)}
+.logos span.req{border-style:dashed;color:var(--accent);border-color:var(--accent)}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.step{position:relative;padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.step .num{font-family:var(--display);font-weight:700;font-size:15px;width:34px;height:34px;border-radius:10px;background:var(--accent);color:#fff;display:grid;place-items:center;margin-bottom:16px}
+.step h3{font-size:18px;margin-bottom:6px}
+.step p{margin:0;color:var(--muted);font-size:15px}
+
+/* Pricing */
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+.price{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.price.feat{border:2px solid var(--accent);box-shadow:0 18px 44px rgba(37,99,235,.18);position:relative}
+.price .pop{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:12px;font-weight:600;padding:4px 12px;border-radius:999px}
+.price h3{font-size:19px;margin-bottom:4px}
+.price .sub{font-size:13.5px;color:var(--muted);min-height:38px}
+.price .amt{font-family:var(--display);font-size:30px;font-weight:700;margin:10px 0 2px}
+.price .amt small{font-size:14px;color:var(--muted);font-weight:500}
+.price ul{list-style:none;padding:0;margin:16px 0 22px;flex:1}
+.price li{display:flex;gap:9px;font-size:14px;color:var(--muted);padding:5px 0}
+.price li::before{content:"✓";color:var(--green);font-weight:700}
+.price .btn{width:100%;justify-content:center}
+.price-note{text-align:center;color:var(--hint);font-size:13px;margin-top:18px}
+
+/* Band */
+.band{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:24px;padding:54px;text-align:center;box-shadow:0 20px 50px rgba(37,99,235,.35)}
+.band h2{font-size:clamp(26px,3.5vw,36px);color:#fff;margin-bottom:14px}
+.band p{font-size:18px;opacity:.92;max-width:560px;margin:0 auto 28px}
+.band .btn-primary{background:#fff;color:var(--accent)}
+.band .btn-primary:hover{background:#eef3ff}
+.band .btn-ghost{color:#fff;border-color:rgba(255,255,255,.5)}
+.band .btn-ghost:hover{background:rgba(255,255,255,.12)}
+
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.form{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow)}
+.form label{display:block;font-size:14px;font-weight:600;margin:14px 0 6px}
+.form input,.form textarea,.form select{width:100%;padding:12px 14px;border:1px solid var(--border-2);border-radius:10px;background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;transition:border-color .15s}
+.form input:focus,.form textarea:focus,.form select:focus{outline:none;border-color:var(--accent)}
+.form textarea{min-height:110px;resize:vertical}
+.form .btn-primary{width:100%;justify-content:center;margin-top:20px}
+.contact-side h2{font-size:30px;margin-bottom:14px}
+.contact-side .row{display:flex;gap:14px;align-items:flex-start;margin:18px 0}
+.contact-side .row .ci{font-size:22px}
+.contact-side .row b{display:block}
+.link{color:var(--accent);font-weight:600}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font-size:14px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .hero-grid,.contact-grid,.demo-split{grid-template-columns:1fr;gap:34px}
+  .products,.prices{grid-template-columns:1fr}
+  .fgrid,.steps{grid-template-columns:1fr 1fr}
+  .kanban{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+@media(max-width:560px){
+  .fgrid,.steps{grid-template-columns:1fr}
+  section{padding:58px 0}
+  .band{padding:36px 22px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="url(#g)"/>
+        <rect x="6" y="6" width="9" height="9" rx="2" fill="#fff" opacity=".95"/>
+        <rect x="17" y="6" width="9" height="6" rx="2" fill="#fff" opacity=".7"/>
+        <rect x="6" y="17" width="6" height="9" rx="2" fill="#fff" opacity=".7"/>
+        <rect x="14" y="14" width="12" height="12" rx="2" fill="#fff" opacity=".9"/>
+        <defs><linearGradient id="g" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+      </svg>
+      <span data-brand>FabSuite</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#products" data-i18n="nav.products">Produktai</a>
+      <a href="#demo" data-i18n="nav.demo">Peržiūra</a>
+      <a href="#features" data-i18n="nav.features">Funkcijos</a>
+      <a href="#pricing" data-i18n="nav.pricing">Kainos</a>
+      <a href="#contact" data-i18n="nav.contact">Kontaktai</a>
+    </nav>
+    <div class="nav-right">
+      <button class="icon-btn" id="langBtn" title="Language">EN</button>
+      <button class="icon-btn" id="themeBtn" title="Theme">🌙</button>
+      <a href="#contact" class="btn btn-primary" data-i18n="nav.cta">Užsisakyti demo</a>
+    </div>
+  </div>
+</header>
+
+<a id="top"></a>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="badge"><span class="dot"></span><span data-i18n="hero.badge">Sukurta ir naudojama realioje baldų gamykloje</span></span>
+      <h1 data-i18n="hero.h1">Visa gamyba — <span class="grad">vienoje sistemoje</span></h1>
+      <p class="lead" data-i18n="hero.lead">Nuo medžiagos pjovimo optimizavimo iki gamybos valdymo ir sandėlio. FabSuite — vienos šeimos įrankiai baldų ir gaminių gamykloms, gimę realiame ceche, o ne biure.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary" data-i18n="hero.cta1">Užsisakyti demo</a>
+        <a href="#demo" class="btn btn-ghost" data-i18n="hero.cta2">Pamatyti veikiant</a>
+      </div>
+      <div class="hero-trust">
+        <div><b>−15%</b><span data-i18n="hero.t1">mažiau medžiagų atliekų*</span></div>
+        <div><b>LT / EN</b><span data-i18n="hero.t2">dvikalbė sąsaja</span></div>
+        <div><b>2</b><span data-i18n="hero.t3">veikiantys produktai</span></div>
+      </div>
+    </div>
+    <div class="appwin" aria-hidden="true">
+      <div class="appbar"><i></i><i></i><i></i><span class="ttl" data-brand-suffix>FabSuite · Nesting</span><span class="pill">2800×2070 · MDF 18mm</span></div>
+      <div class="sheets">
+        <div class="sheet" id="sheetA"></div>
+        <div class="sheet" id="sheetB"></div>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><small data-i18n="mock.k1">Išnaudojimas</small><b>92.4%</b></div>
+        <div class="kpi"><small data-i18n="mock.k2">Atraižos</small><b>1.6 m²</b></div>
+        <div class="kpi"><small data-i18n="mock.k3">Plokščių</small><b>2</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="proof">
+  <div class="wrap">
+    <span class="pt" data-i18n="proof.t">🏭 <b>Naudojama kasdien</b> realioje baldų gamyboje · 🌐 <b>LT / EN</b> · ☁️ Debesyje (Supabase) · 🔗 SWOOD · DXF · Excel · QR</span>
+  </div>
+</div>
+
+<section id="products">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="prod.eyebrow">Produktai</span>
+      <h2 data-i18n="prod.h2">Du veikiantys įrankiai. Daugiau jau kuriama.</h2>
+      <p data-i18n="prod.sub">Kiekvienas modulis veikia savarankiškai arba kartu — bendri vartotojai, sandėlis ir duomenys.</p>
+    </div>
+    <div class="products">
+      <div class="pcard reveal">
+        <span class="chip live" data-i18n="prod.live">Veikia</span>
+        <div class="picon">🪚</div>
+        <span class="ptag" data-i18n="prod.n.tag">Pjovimo optimizavimas</span>
+        <h3 data-i18n="prod.n.title">Nesting</h3>
+        <p class="muted" data-i18n="prod.n.desc">Tikros formos plokščių išdėstymas, kuris sumažina atliekas ir taupo medžiagą kiekvienam užsakymui.</p>
+        <ul>
+          <li data-i18n="prod.n.l1">SWOOD pjovimo sąrašų importas</li>
+          <li data-i18n="prod.n.l2">Tikros formos nesting (SVGnest) maksimaliam išnaudojimui</li>
+          <li data-i18n="prod.n.l3">DXF eksportas į CNC</li>
+          <li data-i18n="prod.n.l4">QR / Zebra etiketės</li>
+          <li data-i18n="prod.n.l5">Atraižų ir likučių apskaita</li>
+          <li data-i18n="prod.n.l6">Su sandėliu susietos plokščių rezervacijos</li>
+        </ul>
+      </div>
+      <div class="pcard reveal">
+        <span class="chip live" data-i18n="prod.live">Veikia</span>
+        <div class="picon">🏭</div>
+        <span class="ptag" data-i18n="prod.d.tag">Gamybos valdymas</span>
+        <h3 data-i18n="prod.d.title">Gamybos valdymas</h3>
+        <p class="muted" data-i18n="prod.d.desc">Projektai, užduotys, etapai ir sandėlis vienoje vietoje — nuo užsakymo iki išsiuntimo.</p>
+        <ul>
+          <li data-i18n="prod.d.l1">Projektai, užduotys ir gamybos etapai</li>
+          <li data-i18n="prod.d.l2">Komanda, rolės ir teisės</li>
+          <li data-i18n="prod.d.l3">Sandėlis, atsargos ir medžiagų poreikis</li>
+          <li data-i18n="prod.d.l4">Kanban, srautas (pipeline) ir Gantt vaizdai</li>
+          <li data-i18n="prod.d.l5">Surinkimo sąrašai, pakavimo lapai, QR</li>
+          <li data-i18n="prod.d.l6">Excel importas, PDF ir ataskaitos</li>
+        </ul>
+      </div>
+      <div class="pcard soon reveal">
+        <span class="chip" data-i18n="prod.soon">Netrukus</span>
+        <div class="picon">📄</div>
+        <span class="ptag" data-i18n="prod.o.tag">Pardavimai</span>
+        <h3 data-i18n="prod.o.title">Pasiūlymai</h3>
+        <p class="muted" data-i18n="prod.o.desc">Greitas pasiūlymų ir kainos skaičiavimas tiesiai iš gamybos duomenų.</p>
+        <ul>
+          <li data-i18n="prod.o.l1">Automatinis kainos skaičiavimas</li>
+          <li data-i18n="prod.o.l2">Pasiūlymai PDF formatu</li>
+          <li data-i18n="prod.o.l3">Susiejimas su gamybos užsakymais</li>
+        </ul>
+      </div>
+      <div class="pcard soon reveal">
+        <span class="chip" data-i18n="prod.soon">Netrukus</span>
+        <div class="picon">🤝</div>
+        <span class="ptag">CRM</span>
+        <h3 data-i18n="prod.c.title">CRM</h3>
+        <p class="muted" data-i18n="prod.c.desc">Klientai, pardavimų piltuvas ir bendravimo istorija viename įrankyje.</p>
+        <ul>
+          <li data-i18n="prod.c.l1">Klientų kortelės ir kontaktai</li>
+          <li data-i18n="prod.c.l2">Pardavimų piltuvas</li>
+          <li data-i18n="prod.c.l3">Užsakymų ir pasiūlymų istorija</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="demo" class="demo">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="demo.eyebrow">Peržiūra</span>
+      <h2 data-i18n="demo.h2">Pamatykite, kaip tai atrodo</h2>
+      <p data-i18n="demo.sub">Tikri sistemos ekranai su pavyzdiniais duomenimis.</p>
+    </div>
+    <div class="tabs reveal">
+      <button class="tab active" data-tab="t-nest" data-i18n="demo.tab1">🪚 Nesting</button>
+      <button class="tab" data-tab="t-prod" data-i18n="demo.tab2">🏭 Gamyba</button>
+      <button class="tab" data-tab="t-wh" data-i18n="demo.tab3">📦 Sandėlis</button>
+    </div>
+
+    <!-- Nesting panel -->
+    <div class="panel active" id="t-nest">
+      <div class="appwin">
+        <div class="appbar"><i></i><i></i><i></i><span class="ttl" data-brand-suffix>FabSuite · Nesting</span><span class="pill" data-i18n="demo.nest.pill">Užsakymas #1042</span></div>
+        <div class="demo-body demo-split">
+          <div class="appwin" style="box-shadow:none">
+            <div class="sheets" style="padding:14px"><div class="sheet" id="sheetC"></div><div class="sheet" id="sheetD"></div></div>
+            <div class="kpis" style="padding:6px 14px 14px">
+              <div class="kpi"><small data-i18n="mock.k1">Išnaudojimas</small><b>92.4%</b></div>
+              <div class="kpi"><small data-i18n="mock.k2">Atraižos</small><b>1.6 m²</b></div>
+              <div class="kpi"><small data-i18n="demo.nest.saved">Sutaupyta</small><b>1 ▮</b></div>
+            </div>
+          </div>
+          <div>
+            <table class="dtable">
+              <thead><tr>
+                <th data-i18n="th.material">Medžiaga</th>
+                <th class="mono" data-i18n="th.thick">Storis</th>
+                <th class="mono" data-i18n="th.parts">Detalių</th>
+                <th class="mono" data-i18n="th.sheets">Plokščių</th>
+                <th class="mono" data-i18n="th.eff">Išnaud.</th>
+              </tr></thead>
+              <tbody>
+                <tr><td>MDF</td><td class="mono">18 mm</td><td class="mono">42</td><td class="mono">2</td><td class="mono"><span class="tag g">92.4%</span></td></tr>
+                <tr><td>LDSP balta</td><td class="mono">18 mm</td><td class="mono">28</td><td class="mono">1</td><td class="mono"><span class="tag g">88.1%</span></td></tr>
+                <tr><td>HDF</td><td class="mono">3 mm</td><td class="mono">16</td><td class="mono">1</td><td class="mono"><span class="tag g">95.2%</span></td></tr>
+                <tr><td data-i18n="demo.nest.ply">Beržo fanera</td><td class="mono">18 mm</td><td class="mono">9</td><td class="mono">1</td><td class="mono"><span class="tag a">81.7%</span></td></tr>
+              </tbody>
+            </table>
+            <p class="caption" style="text-align:left;margin-top:14px" data-i18n="demo.nest.cap">SWOOD importas → tikros formos nesting → DXF į CNC ir QR etiketės.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Production panel -->
+    <div class="panel" id="t-prod">
+      <div class="appwin">
+        <div class="appbar"><i></i><i></i><i></i><span class="ttl" data-brand-suffix>FabSuite · Gamybos valdymas</span><span class="pill" data-i18n="demo.prod.pill">Kanban</span></div>
+        <div class="demo-body">
+          <div class="kanban">
+            <div class="kcol">
+              <h4><span data-i18n="kb.planned">Planuojama</span><span>3</span></h4>
+              <div class="kcard"><div class="kt" data-i18n="demo.j1">Virtuvė — projektas #1042</div><div class="kc">UAB „Pavyzdys"</div><div class="kf"><span class="tag b" data-i18n="kb.cut">Pjovimas</span><span class="av">MT</span></div></div>
+              <div class="kcard"><div class="kt" data-i18n="demo.j2">Spinta su stumdomomis durimis</div><div class="kc">UAB „Demonstracija"</div><div class="kf"><span class="tag b" data-i18n="kb.cut">Pjovimas</span><span class="av">RG</span></div></div>
+              <div class="kcard"><div class="kt" data-i18n="demo.j3">Biuro baldų komplektas</div><div class="kc" data-i18n="demo.client3">Privatus klientas</div><div class="kf"><span class="tag b" data-i18n="kb.cut">Pjovimas</span><span class="av">JK</span></div></div>
+            </div>
+            <div class="kcol">
+              <h4><span data-i18n="kb.progress">Vykdoma</span><span>2</span></h4>
+              <div class="kcard"><div class="kt" data-i18n="demo.j4">Vonios spintelės (x6)</div><div class="kc">UAB „Pavyzdys"</div><div class="kf"><span class="tag a" data-i18n="kb.assembly">Surinkimas</span><span class="av">MT</span></div></div>
+              <div class="kcard"><div class="kt" data-i18n="demo.j5">Prekystalis — kavinė</div><div class="kc">UAB „Demonstracija"</div><div class="kf"><span class="tag a" data-i18n="kb.edge">Kraštų klijavimas</span><span class="av">RG</span></div></div>
+            </div>
+            <div class="kcol">
+              <h4><span data-i18n="kb.done">Atlikta</span><span>4</span></h4>
+              <div class="kcard"><div class="kt" data-i18n="demo.j6">Drabužinė — projektas #1031</div><div class="kc">UAB „Pavyzdys"</div><div class="kf"><span class="tag g" data-i18n="kb.packed">Supakuota</span><span class="av">JK</span></div></div>
+              <div class="kcard"><div class="kt" data-i18n="demo.j7">TV sekcija</div><div class="kc" data-i18n="demo.client3">Privatus klientas</div><div class="kf"><span class="tag g" data-i18n="kb.shipped">Išsiųsta</span><span class="av">MT</span></div></div>
+            </div>
+          </div>
+          <div class="gantt">
+            <div class="gh" data-i18n="demo.gantt.h">Savaitės planas</div>
+            <div class="ghead"><span></span><div class="days"><span data-i18n="g.d1">Pr</span><span data-i18n="g.d2">An</span><span data-i18n="g.d3">Tr</span><span data-i18n="g.d4">Kt</span><span data-i18n="g.d5">Pn</span></div></div>
+            <div class="grow"><span class="glabel" data-i18n="demo.j1">Virtuvė — projektas #1042</span><div class="gtrack"><div class="gbar" style="left:0;width:60%"><span data-i18n="kb.cut">Pjovimas</span></div></div></div>
+            <div class="grow"><span class="glabel" data-i18n="demo.j4">Vonios spintelės (x6)</span><div class="gtrack"><div class="gbar a" style="left:20%;width:60%"><span data-i18n="kb.assembly">Surinkimas</span></div></div></div>
+            <div class="grow"><span class="glabel" data-i18n="demo.j5">Prekystalis — kavinė</span><div class="gtrack"><div class="gbar a" style="left:40%;width:60%"><span data-i18n="kb.edge">Kraštų klijavimas</span></div></div></div>
+            <div class="grow"><span class="glabel" data-i18n="demo.j6">Drabužinė — projektas #1031</span><div class="gtrack"><div class="gbar g" style="left:0;width:20%"><span data-i18n="kb.packed">Supakuota</span></div></div></div>
+          </div>
+          <p class="caption" data-i18n="demo.prod.cap">Projektai juda etapais — nuo pjovimo iki išsiuntimo — su atsakingais darbuotojais ir terminais.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Warehouse panel -->
+    <div class="panel" id="t-wh">
+      <div class="appwin">
+        <div class="appbar"><i></i><i></i><i></i><span class="ttl" data-brand-suffix>FabSuite · Sandėlis</span><span class="pill" data-i18n="demo.wh.pill">Plokščių likučiai</span></div>
+        <div class="demo-body">
+          <table class="dtable">
+            <thead><tr>
+              <th class="mono" data-i18n="th.sku">Artikulas</th>
+              <th data-i18n="th.material">Medžiaga</th>
+              <th class="mono" data-i18n="th.thick">Storis</th>
+              <th class="mono" data-i18n="th.stock">Likutis</th>
+              <th class="mono" data-i18n="th.reserved">Rezervuota</th>
+              <th class="mono" data-i18n="th.price">Kaina</th>
+              <th data-i18n="th.status">Būsena</th>
+            </tr></thead>
+            <tbody>
+              <tr><td class="mono">MDF-18-2870</td><td>MDF</td><td class="mono">18 mm</td><td class="mono">24</td><td class="mono">6</td><td class="mono">38,50 €</td><td><span class="tag g" data-i18n="wh.ok">Pakanka</span></td></tr>
+              <tr><td class="mono">LDSP-W-18</td><td>LDSP balta</td><td class="mono">18 mm</td><td class="mono">51</td><td class="mono">12</td><td class="mono">29,90 €</td><td><span class="tag g" data-i18n="wh.ok">Pakanka</span></td></tr>
+              <tr><td class="mono">HDF-3</td><td>HDF</td><td class="mono">3 mm</td><td class="mono">9</td><td class="mono">0</td><td class="mono">9,20 €</td><td><span class="tag a" data-i18n="wh.low">Mažėja</span></td></tr>
+              <tr><td class="mono">PLY-B-18</td><td data-i18n="demo.nest.ply">Beržo fanera</td><td class="mono">18 mm</td><td class="mono">3</td><td class="mono">3</td><td class="mono">64,00 €</td><td><span class="tag a" data-i18n="wh.low">Mažėja</span></td></tr>
+              <tr><td class="mono">OAK-V-19</td><td data-i18n="demo.wh.oak">Ąžuolo faneruotė</td><td class="mono">19 mm</td><td class="mono">7</td><td class="mono">1</td><td class="mono">112,00 €</td><td><span class="tag g" data-i18n="wh.ok">Pakanka</span></td></tr>
+            </tbody>
+          </table>
+          <p class="caption" data-i18n="demo.wh.cap">Atraižos ir rezervacijos atsinaujina automatiškai po kiekvieno nesting'o.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="feat.eyebrow">Kodėl FabSuite</span>
+      <h2 data-i18n="feat.h2">Sukurta ceche, ne biure</h2>
+      <p data-i18n="feat.sub">Kiekviena funkcija atsirado iš realių gamybos poreikių.</p>
+    </div>
+    <div class="fgrid">
+      <div class="fcard reveal"><div class="fi">📉</div><h3 data-i18n="feat.f1.t">Mažiau atliekų</h3><p data-i18n="feat.f1.d">Tikros formos nesting išspaudžia maksimalų plokštės išnaudojimą kiekvienam užsakymui.</p></div>
+      <div class="fcard reveal"><div class="fi">🌐</div><h3 data-i18n="feat.f2.t">Dvikalbė sąsaja</h3><p data-i18n="feat.f2.d">Visa sistema lietuvių ir anglų kalbomis — tinka tarptautinėms komandoms.</p></div>
+      <div class="fcard reveal"><div class="fi">☁️</div><h3 data-i18n="feat.f3.t">Debesyje</h3><p data-i18n="feat.f3.d">Duomenys saugomi saugiai debesyje (Supabase) — prieiga iš bet kurios darbo vietos.</p></div>
+      <div class="fcard reveal"><div class="fi">🏷️</div><h3 data-i18n="feat.f4.t">Etiketės ir QR</h3><p data-i18n="feat.f4.d">Zebra etiketės ir QR kodai detalėms — greitas sekimas visame ceche.</p></div>
+      <div class="fcard reveal"><div class="fi">🔗</div><h3 data-i18n="feat.f5.t">Integracijos</h3><p data-i18n="feat.f5.d">SWOOD, DXF, Excel ir PDF — įsilieja į esamą darbo eigą. Kitos integracijos — pagal poreikį.</p></div>
+      <div class="fcard reveal"><div class="fi">📦</div><h3 data-i18n="feat.f6.t">Vienas sandėlis</h3><p data-i18n="feat.f6.d">Plokštės, atsargos ir rezervacijos bendros visiems moduliams — be dubliavimo.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="integrations">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="int.eyebrow">Integracijos</span>
+      <h2 data-i18n="int.h2">Veikia su tuo, ką jau naudojate</h2>
+      <p data-i18n="int.sub">Reikia kažko kito? Integracijas galime pritaikyti pagal poreikį.</p>
+    </div>
+    <div class="logos reveal">
+      <span>SWOOD</span><span>DXF / CNC</span><span>Excel · XLSX</span><span>PDF</span><span>QR · Zebra</span><span>Supabase</span>
+      <span class="req" data-i18n="int.req">+ pagal poreikį</span>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="how.eyebrow">Kaip pradėti</span>
+      <h2 data-i18n="how.h2">Paleidimas per tris žingsnius</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="num">1</div><h3 data-i18n="how.s1.t">Demo ir poreikių analizė</h3><p data-i18n="how.s1.d">Parodome sistemą gyvai ir aptariame jūsų gamybos procesą.</p></div>
+      <div class="step reveal"><div class="num">2</div><h3 data-i18n="how.s2.t">Pritaikymas ir duomenys</h3><p data-i18n="how.s2.d">Sukonfigūruojame vartotojus, sandėlį ir importuojame jūsų duomenis.</p></div>
+      <div class="step reveal"><div class="num">3</div><h3 data-i18n="how.s3.t">Gamyba</h3><p data-i18n="how.s3.d">Komanda dirba realiu laiku — su mokymais ir palaikymu.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="price.eyebrow">Kainodara</span>
+      <h2 data-i18n="price.h2">Skaidri kaina pagal jūsų dydį</h2>
+      <p data-i18n="price.sub">Mokate tik už tai, ką naudojate. Be ilgalaikių įsipareigojimų.</p>
+    </div>
+    <div class="prices">
+      <div class="price reveal">
+        <h3 data-i18n="price.t1.name">Modulis</h3>
+        <div class="sub" data-i18n="price.t1.sub">Vienas įrankis — Nesting arba Gamybos valdymas.</div>
+        <div class="amt" data-price="module"><small data-i18n="price.from">nuo</small> — €<small data-i18n="price.permo">/mėn</small></div>
+        <ul>
+          <li data-i18n="price.t1.l1">1 modulis pasirinktinai</li>
+          <li data-i18n="price.t1.l2">Iki 5 vartotojų</li>
+          <li data-i18n="price.t1.l3">Debesis ir atnaujinimai</li>
+          <li data-i18n="price.t1.l4">El. pašto palaikymas</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost" data-i18n="price.cta">Susisiekti</a>
+      </div>
+      <div class="price feat reveal">
+        <span class="pop" data-i18n="price.popular">Populiariausia</span>
+        <h3 data-i18n="price.t2.name">Visa sistema</h3>
+        <div class="sub" data-i18n="price.t2.sub">Nesting + Gamybos valdymas, bendras sandėlis.</div>
+        <div class="amt" data-price="suite"><small data-i18n="price.from">nuo</small> — €<small data-i18n="price.permo">/mėn</small></div>
+        <ul>
+          <li data-i18n="price.t2.l1">Visi veikiantys moduliai</li>
+          <li data-i18n="price.t2.l2">Iki 20 vartotojų</li>
+          <li data-i18n="price.t2.l3">QR / Zebra etiketės</li>
+          <li data-i18n="price.t2.l4">Duomenų importas (Excel)</li>
+          <li data-i18n="price.t2.l5">Pirmenybinis palaikymas</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary" data-i18n="price.cta2">Užsisakyti demo</a>
+      </div>
+      <div class="price reveal">
+        <h3 data-i18n="price.t3.name">Gamykla</h3>
+        <div class="sub" data-i18n="price.t3.sub">Didelėms komandoms su individualiais poreikiais.</div>
+        <div class="amt" data-i18n="price.custom">Individualu</div>
+        <ul>
+          <li data-i18n="price.t3.l1">Neribotai vartotojų</li>
+          <li data-i18n="price.t3.l2">Integracijos pagal poreikį</li>
+          <li data-i18n="price.t3.l3">Mokymai vietoje</li>
+          <li data-i18n="price.t3.l4">Dedikuotas palaikymas</li>
+          <li data-i18n="price.t3.l5">Būsimi moduliai (Pasiūlymai, CRM)</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost" data-i18n="price.cta">Susisiekti</a>
+      </div>
+    </div>
+    <p class="price-note" data-i18n="price.note">* Tikslią kainą pateiksime po trumpo pokalbio apie jūsų gamyklą.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="band reveal">
+      <h2 data-i18n="cta.h2">Pasiruošę sumažinti atliekas ir suvaldyti gamybą?</h2>
+      <p data-i18n="cta.p">Užsisakykite nemokamą demo — parodysime, kaip FabSuite veiks būtent jūsų ceche.</p>
+      <div class="hero-cta" style="justify-content:center">
+        <a href="#contact" class="btn btn-primary" data-i18n="cta.b1">Užsisakyti demo</a>
+        <a href="mailto:gervdalius@gmail.com?subject=FabSuite%20kainodara" class="btn btn-ghost" data-i18n="cta.b2">Klausti kainos</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-side reveal">
+      <span class="eyebrow" data-i18n="con.eyebrow">Kontaktai</span>
+      <h2 data-i18n="con.h2">Pakalbėkime apie jūsų gamybą</h2>
+      <p class="muted" data-i18n="con.sub">Užpildykite formą arba parašykite tiesiogiai — atsakysime per 1 darbo dieną.</p>
+      <div class="row"><span class="ci">✉️</span><div><b data-i18n="con.email">El. paštas</b><a class="link" href="mailto:gervdalius@gmail.com">gervdalius@gmail.com</a></div></div>
+      <div class="row"><span class="ci">🌍</span><div><b data-i18n="con.lang">Kalbos</b><span class="muted">Lietuvių · English</span></div></div>
+      <div class="row"><span class="ci">⚡</span><div><b data-i18n="con.live">Statusas</b><span class="muted" data-i18n="con.livev">Nesting ir Gamybos valdymas — jau veikia</span></div></div>
+    </div>
+    <form class="form reveal" id="demoForm">
+      <label data-i18n="form.name">Vardas</label>
+      <input type="text" id="f_name" required>
+      <label data-i18n="form.company">Įmonė</label>
+      <input type="text" id="f_company">
+      <label data-i18n="form.email">El. paštas</label>
+      <input type="email" id="f_email" required>
+      <label data-i18n="form.interest">Dominantis produktas</label>
+      <select id="f_interest">
+        <option data-i18n="form.opt.all">Visa sistema</option>
+        <option data-i18n="form.opt.nest">Nesting</option>
+        <option data-i18n="form.opt.prod">Gamybos valdymas</option>
+        <option data-i18n="form.opt.soon">Pasiūlymai / CRM</option>
+      </select>
+      <label data-i18n="form.msg">Žinutė</label>
+      <textarea id="f_msg"></textarea>
+      <button type="submit" class="btn btn-primary" data-i18n="form.send">Siųsti užklausą</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="url(#g2)"/>
+        <rect x="6" y="6" width="9" height="9" rx="2" fill="#fff" opacity=".95"/>
+        <rect x="17" y="6" width="9" height="6" rx="2" fill="#fff" opacity=".7"/>
+        <rect x="6" y="17" width="6" height="9" rx="2" fill="#fff" opacity=".7"/>
+        <rect x="14" y="14" width="12" height="12" rx="2" fill="#fff" opacity=".9"/>
+        <defs><linearGradient id="g2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+      </svg>
+      <span data-brand>FabSuite</span>
+    </div>
+    <div data-i18n="foot.copy">© 2026 FabSuite. Gamybos programinė įranga.</div>
+    <div><a class="link" href="mailto:gervdalius@gmail.com">gervdalius@gmail.com</a></div>
+  </div>
+</footer>
+
+<script>
+/* ===== Brand (edit here to rename everywhere) ===== */
+const BRAND = "FabSuite";
+
+/* ===== Pricing (fill in real numbers; "—" shows a dash until set) ===== */
+const PRICES = { module: "—", suite: "—" };   // e.g. module:"149", suite:"299"
+
+/* ===== i18n ===== */
+const I18N = {
+  "nav.products":["Produktai","Products"],"nav.demo":["Peržiūra","Preview"],"nav.features":["Funkcijos","Features"],"nav.pricing":["Kainos","Pricing"],"nav.contact":["Kontaktai","Contact"],"nav.cta":["Užsisakyti demo","Book a demo"],
+  "hero.badge":["Sukurta ir naudojama realioje baldų gamykloje","Built and used in a real furniture factory"],
+  "hero.h1":['Visa gamyba — <span class="grad">vienoje sistemoje</span>','All production — <span class="grad">in one system</span>'],
+  "hero.lead":["Nuo medžiagos pjovimo optimizavimo iki gamybos valdymo ir sandėlio. FabSuite — vienos šeimos įrankiai baldų ir gaminių gamykloms, gimę realiame ceche, o ne biure.","From material cut optimization to production management and stock. FabSuite is one family of tools for furniture and product manufacturers — born on a real shop floor, not in an office."],
+  "hero.cta1":["Užsisakyti demo","Book a demo"],"hero.cta2":["Pamatyti veikiant","See it in action"],
+  "hero.t1":["mažiau medžiagų atliekų*","less material waste*"],"hero.t2":["dvikalbė sąsaja","bilingual interface"],"hero.t3":["veikiantys produktai","live products"],
+  "mock.k1":["Išnaudojimas","Yield"],"mock.k2":["Atraižos","Offcuts"],"mock.k3":["Plokščių","Sheets"],
+  "proof.t":['🏭 <b>Naudojama kasdien</b> realioje baldų gamyboje · 🌐 <b>LT / EN</b> · ☁️ Debesyje (Supabase) · 🔗 SWOOD · DXF · Excel · QR','🏭 <b>Used daily</b> in real furniture production · 🌐 <b>LT / EN</b> · ☁️ Cloud (Supabase) · 🔗 SWOOD · DXF · Excel · QR'],
+  "prod.eyebrow":["Produktai","Products"],"prod.h2":["Du veikiantys įrankiai. Daugiau jau kuriama.","Two live tools. More on the way."],"prod.sub":["Kiekvienas modulis veikia savarankiškai arba kartu — bendri vartotojai, sandėlis ir duomenys.","Each module works standalone or together — shared users, stock and data."],
+  "prod.live":["Veikia","Live"],"prod.soon":["Netrukus","Coming soon"],
+  "prod.n.tag":["Pjovimo optimizavimas","Cut optimization"],"prod.n.title":["Nesting","Nesting"],"prod.n.desc":["Tikros formos plokščių išdėstymas, kuris sumažina atliekas ir taupo medžiagą kiekvienam užsakymui.","True-shape sheet layout that cuts waste and saves material on every order."],
+  "prod.n.l1":["SWOOD pjovimo sąrašų importas","SWOOD cut-list import"],"prod.n.l2":["Tikros formos nesting (SVGnest) maksimaliam išnaudojimui","True-shape nesting (SVGnest) for maximum yield"],"prod.n.l3":["DXF eksportas į CNC","DXF export to CNC"],"prod.n.l4":["QR / Zebra etiketės","QR / Zebra labels"],"prod.n.l5":["Atraižų ir likučių apskaita","Offcut and remnant tracking"],"prod.n.l6":["Su sandėliu susietos plokščių rezervacijos","Warehouse-linked sheet reservations"],
+  "prod.d.tag":["Gamybos valdymas","Production management"],"prod.d.title":["Gamybos valdymas","Production management"],"prod.d.desc":["Projektai, užduotys, etapai ir sandėlis vienoje vietoje — nuo užsakymo iki išsiuntimo.","Projects, tasks, steps and stock in one place — from order to shipment."],
+  "prod.d.l1":["Projektai, užduotys ir gamybos etapai","Projects, tasks and production steps"],"prod.d.l2":["Komanda, rolės ir teisės","Team, roles and permissions"],"prod.d.l3":["Sandėlis, atsargos ir medžiagų poreikis","Warehouse, stock and material needs"],"prod.d.l4":["Kanban, srautas (pipeline) ir Gantt vaizdai","Kanban, pipeline and Gantt views"],"prod.d.l5":["Surinkimo sąrašai, pakavimo lapai, QR","Assembly lists, packing slips, QR"],"prod.d.l6":["Excel importas, PDF ir ataskaitos","Excel import, PDF and reports"],
+  "prod.o.tag":["Pardavimai","Sales"],"prod.o.title":["Pasiūlymai","Offers"],"prod.o.desc":["Greitas pasiūlymų ir kainos skaičiavimas tiesiai iš gamybos duomenų.","Fast quotes and pricing straight from production data."],"prod.o.l1":["Automatinis kainos skaičiavimas","Automatic price calculation"],"prod.o.l2":["Pasiūlymai PDF formatu","Quotes as PDF"],"prod.o.l3":["Susiejimas su gamybos užsakymais","Linked to production orders"],
+  "prod.c.title":["CRM","CRM"],"prod.c.desc":["Klientai, pardavimų piltuvas ir bendravimo istorija viename įrankyje.","Customers, sales pipeline and history in one tool."],"prod.c.l1":["Klientų kortelės ir kontaktai","Customer cards and contacts"],"prod.c.l2":["Pardavimų piltuvas","Sales pipeline"],"prod.c.l3":["Užsakymų ir pasiūlymų istorija","Order and quote history"],
+  "demo.eyebrow":["Peržiūra","Preview"],"demo.h2":["Pamatykite, kaip tai atrodo","See how it looks"],"demo.sub":["Tikri sistemos ekranai su pavyzdiniais duomenimis.","Real system screens with sample data."],
+  "demo.tab1":["🪚 Nesting","🪚 Nesting"],"demo.tab2":["🏭 Gamyba","🏭 Production"],"demo.tab3":["📦 Sandėlis","📦 Warehouse"],
+  "demo.nest.pill":["Užsakymas #1042","Order #1042"],"demo.nest.saved":["Sutaupyta","Saved"],"demo.nest.ply":["Beržo fanera","Birch plywood"],
+  "demo.nest.cap":["SWOOD importas → tikros formos nesting → DXF į CNC ir QR etiketės.","SWOOD import → true-shape nesting → DXF to CNC and QR labels."],
+  "demo.prod.pill":["Kanban + Gantt","Kanban + Gantt"],
+  "demo.gantt.h":["Savaitės planas","Week schedule"],"g.d1":["Pr","Mon"],"g.d2":["An","Tue"],"g.d3":["Tr","Wed"],"g.d4":["Kt","Thu"],"g.d5":["Pn","Fri"],
+  "demo.prod.cap":["Projektai juda etapais — nuo pjovimo iki išsiuntimo — su atsakingais darbuotojais ir terminais.","Projects move through stages — from cutting to shipping — with assignees and deadlines."],
+  "demo.wh.pill":["Plokščių likučiai","Sheet stock"],"demo.wh.cap":["Atraižos ir rezervacijos atsinaujina automatiškai po kiekvieno nesting'o.","Offcuts and reservations update automatically after every nesting run."],"demo.wh.oak":["Ąžuolo faneruotė","Oak veneer"],
+  "demo.j1":["Virtuvė — projektas #1042","Kitchen — project #1042"],"demo.j2":["Spinta su stumdomomis durimis","Wardrobe with sliding doors"],"demo.j3":["Biuro baldų komplektas","Office furniture set"],"demo.j4":["Vonios spintelės (x6)","Bathroom cabinets (x6)"],"demo.j5":["Prekystalis — kavinė","Counter — café"],"demo.j6":["Drabužinė — projektas #1031","Walk-in closet — project #1031"],"demo.j7":["TV sekcija","TV unit"],"demo.client3":["Privatus klientas","Private client"],
+  "kb.planned":["Planuojama","Planned"],"kb.progress":["Vykdoma","In progress"],"kb.done":["Atlikta","Done"],
+  "kb.cut":["Pjovimas","Cutting"],"kb.assembly":["Surinkimas","Assembly"],"kb.edge":["Kraštų klijavimas","Edge banding"],"kb.packed":["Supakuota","Packed"],"kb.shipped":["Išsiųsta","Shipped"],
+  "th.material":["Medžiaga","Material"],"th.thick":["Storis","Thick."],"th.parts":["Detalių","Parts"],"th.sheets":["Plokščių","Sheets"],"th.eff":["Išnaud.","Yield"],"th.sku":["Artikulas","SKU"],"th.stock":["Likutis","Stock"],"th.reserved":["Rezervuota","Reserved"],"th.price":["Kaina","Price"],"th.status":["Būsena","Status"],
+  "wh.ok":["Pakanka","In stock"],"wh.low":["Mažėja","Low"],
+  "feat.eyebrow":["Kodėl FabSuite","Why FabSuite"],"feat.h2":["Sukurta ceche, ne biure","Built on the floor, not in an office"],"feat.sub":["Kiekviena funkcija atsirado iš realių gamybos poreikių.","Every feature came from a real production need."],
+  "feat.f1.t":["Mažiau atliekų","Less waste"],"feat.f1.d":["Tikros formos nesting išspaudžia maksimalų plokštės išnaudojimą kiekvienam užsakymui.","True-shape nesting squeezes maximum yield from every sheet."],
+  "feat.f2.t":["Dvikalbė sąsaja","Bilingual"],"feat.f2.d":["Visa sistema lietuvių ir anglų kalbomis — tinka tarptautinėms komandoms.","The whole system in Lithuanian and English — fit for international teams."],
+  "feat.f3.t":["Debesyje","In the cloud"],"feat.f3.d":["Duomenys saugomi saugiai debesyje (Supabase) — prieiga iš bet kurios darbo vietos.","Data stored securely in the cloud (Supabase) — access from any workstation."],
+  "feat.f4.t":["Etiketės ir QR","Labels & QR"],"feat.f4.d":["Zebra etiketės ir QR kodai detalėms — greitas sekimas visame ceche.","Zebra labels and QR codes for parts — fast tracking across the floor."],
+  "feat.f5.t":["Integracijos","Integrations"],"feat.f5.d":["SWOOD, DXF, Excel ir PDF — įsilieja į esamą darbo eigą. Kitos integracijos — pagal poreikį.","SWOOD, DXF, Excel and PDF — fits your existing workflow. Other integrations on request."],
+  "feat.f6.t":["Vienas sandėlis","One warehouse"],"feat.f6.d":["Plokštės, atsargos ir rezervacijos bendros visiems moduliams — be dubliavimo.","Sheets, stock and reservations shared across modules — no duplication."],
+  "int.eyebrow":["Integracijos","Integrations"],"int.h2":["Veikia su tuo, ką jau naudojate","Works with what you already use"],"int.sub":["Reikia kažko kito? Integracijas galime pritaikyti pagal poreikį.","Need something else? We can build integrations on request."],"int.req":["+ pagal poreikį","+ on request"],
+  "how.eyebrow":["Kaip pradėti","Getting started"],"how.h2":["Paleidimas per tris žingsnius","Up and running in three steps"],
+  "how.s1.t":["Demo ir poreikių analizė","Demo & needs review"],"how.s1.d":["Parodome sistemą gyvai ir aptariame jūsų gamybos procesą.","We show the system live and review your production process."],
+  "how.s2.t":["Pritaikymas ir duomenys","Setup & data"],"how.s2.d":["Sukonfigūruojame vartotojus, sandėlį ir importuojame jūsų duomenis.","We configure users, stock and import your data."],
+  "how.s3.t":["Gamyba","Go live"],"how.s3.d":["Komanda dirba realiu laiku — su mokymais ir palaikymu.","Your team works in real time — with training and support."],
+  "price.eyebrow":["Kainodara","Pricing"],"price.h2":["Skaidri kaina pagal jūsų dydį","Transparent pricing for your size"],"price.sub":["Mokate tik už tai, ką naudojate. Be ilgalaikių įsipareigojimų.","Pay only for what you use. No long-term lock-in."],
+  "price.from":["nuo","from"],"price.permo":["/mėn","/mo"],"price.custom":["Individualu","Custom"],"price.popular":["Populiariausia","Most popular"],"price.cta":["Susisiekti","Contact us"],"price.cta2":["Užsisakyti demo","Book a demo"],
+  "price.t1.name":["Modulis","Module"],"price.t1.sub":["Vienas įrankis — Nesting arba Gamybos valdymas.","One tool — Nesting or Production management."],"price.t1.l1":["1 modulis pasirinktinai","1 module of your choice"],"price.t1.l2":["Iki 5 vartotojų","Up to 5 users"],"price.t1.l3":["Debesis ir atnaujinimai","Cloud & updates"],"price.t1.l4":["El. pašto palaikymas","Email support"],
+  "price.t2.name":["Visa sistema","Full suite"],"price.t2.sub":["Nesting + Gamybos valdymas, bendras sandėlis.","Nesting + Production management, shared stock."],"price.t2.l1":["Visi veikiantys moduliai","All live modules"],"price.t2.l2":["Iki 20 vartotojų","Up to 20 users"],"price.t2.l3":["QR / Zebra etiketės","QR / Zebra labels"],"price.t2.l4":["Duomenų importas (Excel)","Data import (Excel)"],"price.t2.l5":["Pirmenybinis palaikymas","Priority support"],
+  "price.t3.name":["Gamykla","Factory"],"price.t3.sub":["Didelėms komandoms su individualiais poreikiais.","For large teams with custom needs."],"price.t3.l1":["Neribotai vartotojų","Unlimited users"],"price.t3.l2":["Integracijos pagal poreikį","Integrations on request"],"price.t3.l3":["Mokymai vietoje","On-site training"],"price.t3.l4":["Dedikuotas palaikymas","Dedicated support"],"price.t3.l5":["Būsimi moduliai (Pasiūlymai, CRM)","Future modules (Offers, CRM)"],
+  "price.note":["* Tikslią kainą pateiksime po trumpo pokalbio apie jūsų gamyklą.","* We'll give an exact price after a short call about your factory."],
+  "cta.h2":["Pasiruošę sumažinti atliekas ir suvaldyti gamybą?","Ready to cut waste and take control of production?"],"cta.p":["Užsisakykite nemokamą demo — parodysime, kaip FabSuite veiks būtent jūsų ceche.","Book a free demo — we'll show how FabSuite fits your shop."],"cta.b1":["Užsisakyti demo","Book a demo"],"cta.b2":["Klausti kainos","Ask about pricing"],
+  "con.eyebrow":["Kontaktai","Contact"],"con.h2":["Pakalbėkime apie jūsų gamybą","Let's talk about your production"],"con.sub":["Užpildykite formą arba parašykite tiesiogiai — atsakysime per 1 darbo dieną.","Fill the form or email us directly — we reply within 1 business day."],"con.email":["El. paštas","Email"],"con.lang":["Kalbos","Languages"],"con.live":["Statusas","Status"],"con.livev":["Nesting ir Gamybos valdymas — jau veikia","Nesting and Production management — live now"],
+  "form.name":["Vardas","Name"],"form.company":["Įmonė","Company"],"form.email":["El. paštas","Email"],"form.interest":["Dominantis produktas","Product of interest"],"form.opt.all":["Visa sistema","Whole suite"],"form.opt.nest":["Nesting","Nesting"],"form.opt.prod":["Gamybos valdymas","Production management"],"form.opt.soon":["Pasiūlymai / CRM","Offers / CRM"],"form.msg":["Žinutė","Message"],"form.send":["Siųsti užklausą","Send request"],
+  "foot.copy":["© 2026 FabSuite. Gamybos programinė įranga.","© 2026 FabSuite. Manufacturing software."]
+};
+
+let lang = localStorage.getItem("fs_lang") || "lt";
+const RICH = new Set(["hero.h1","proof.t"]); // entries that contain HTML
+function applyLang(){
+  const i = lang==="lt"?0:1;
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k = el.getAttribute("data-i18n");
+    if(!I18N[k]) return;
+    const val = I18N[k][i].replace(/FabSuite/g, BRAND);
+    if(RICH.has(k)) el.innerHTML = val; else el.textContent = val;
+  });
+  document.getElementById("langBtn").textContent = lang==="lt"?"EN":"LT";
+  localStorage.setItem("fs_lang", lang);
+  applyPrices();
+}
+document.getElementById("langBtn").addEventListener("click",()=>{lang = lang==="lt"?"en":"lt";applyLang();});
+
+/* Prices */
+function applyPrices(){
+  const i = lang==="lt"?0:1;
+  const quote = ["Pagal pasiūlymą","By quote"][i];
+  document.querySelectorAll("[data-price]").forEach(el=>{
+    const key=el.getAttribute("data-price");
+    const from=I18N["price.from"][i], per=I18N["price.permo"][i];
+    const val = PRICES[key];
+    el.innerHTML = (val && val!=="—")
+      ? `<small>${from}</small> ${val} €<small>${per}</small>`
+      : `<span style="font-size:20px">${quote}</span>`;
+  });
+}
+
+/* Brand */
+document.querySelectorAll("[data-brand]").forEach(el=>el.textContent=BRAND);
+document.querySelectorAll("[data-brand-suffix]").forEach(el=>el.textContent=el.textContent.replace("FabSuite",BRAND));
+
+/* Theme */
+const tBtn = document.getElementById("themeBtn");
+let theme = localStorage.getItem("fs_theme") || (window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+function applyTheme(){document.documentElement.setAttribute("data-theme",theme);tBtn.textContent=theme==="dark"?"☀️":"🌙";localStorage.setItem("fs_theme",theme);}
+tBtn.addEventListener("click",()=>{theme=theme==="dark"?"light":"dark";applyTheme();});
+
+/* Tabs */
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  document.getElementById(t.getAttribute("data-tab")).classList.add("active");
+}));
+
+/* Contact form → mailto */
+document.getElementById("demoForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const v=id=>document.getElementById(id).value.trim();
+  const L = lang==="lt";
+  const subj = `[${BRAND}] ${L?"Demo užklausa":"Demo request"} — ${v("f_company")||v("f_name")}`;
+  const body =
+    `${L?"Vardas":"Name"}: ${v("f_name")}\n`+
+    `${L?"Įmonė":"Company"}: ${v("f_company")}\n`+
+    `${L?"El. paštas":"Email"}: ${v("f_email")}\n`+
+    `${L?"Dominantis produktas":"Product of interest"}: ${document.getElementById("f_interest").value}\n\n`+
+    `${L?"Žinutė":"Message"}:\n${v("f_msg")}\n`;
+  window.location.href = `mailto:gervdalius@gmail.com?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+});
+
+/* Decorative nesting sheets */
+function fillSheet(el,parts){parts.forEach((p,idx)=>{const d=document.createElement("div");d.className="part";d.style.left=p[0]+"%";d.style.top=p[1]+"%";d.style.width=p[2]+"%";d.style.height=p[3]+"%";d.style.opacity=(0.78+0.05*(idx%4)).toFixed(2);el.appendChild(d);});}
+const layoutA=[[4,5,42,38],[50,5,44,24],[50,33,28,30],[80,33,14,56],[4,46,40,48],[46,66,32,28]];
+const layoutB=[[5,6,40,52],[48,6,46,30],[48,40,30,52],[80,40,14,30],[5,60,38,34]];
+["sheetA","sheetC"].forEach(id=>{const el=document.getElementById(id);if(el)fillSheet(el,layoutA);});
+["sheetB","sheetD"].forEach(id=>{const el=document.getElementById(id);if(el)fillSheet(el,layoutB);});
+
+/* Reveal */
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+applyLang();applyTheme();
+</script>
+</body>
+</html>
