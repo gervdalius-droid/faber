@@ -193,7 +193,11 @@ section{padding:78px 0}
 .price li{display:flex;gap:9px;font-size:14px;color:var(--muted);padding:5px 0}
 .price li::before{content:"✓";color:var(--green);font-weight:700}
 .price .btn{width:100%;justify-content:center}
-.price-note{text-align:center;color:var(--hint);font-size:13px;margin-top:18px}
+.price-note{text-align:center;color:var(--hint);font-size:13px;margin-top:18px;max-width:620px;margin-left:auto;margin-right:auto}
+.prices.two{grid-template-columns:repeat(2,minmax(0,1fr));max-width:740px;margin:0 auto}
+.price .seats{display:inline-block;font-size:12.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:3px 11px;border-radius:999px;margin-bottom:6px}
+.price-alt{display:block;text-align:center;margin-top:11px;font-size:13px;color:var(--muted);cursor:pointer}
+.price-alt:hover{color:var(--accent);text-decoration:underline}
 
 /* Band */
 .band{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:24px;padding:54px;text-align:center;box-shadow:0 20px 50px rgba(37,99,235,.35)}
@@ -227,7 +231,7 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
 
 @media(max-width:900px){
   .hero-grid,.contact-grid,.demo-split{grid-template-columns:1fr;gap:34px}
-  .products,.prices{grid-template-columns:1fr}
+  .products,.prices,.prices.two{grid-template-columns:1fr}
   .fgrid,.steps{grid-template-columns:1fr 1fr}
   .kanban{grid-template-columns:1fr}
   .nav-links{display:none}
@@ -264,7 +268,7 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
     <div class="nav-right">
       <button class="icon-btn" id="langBtn" title="Language">EN</button>
       <button class="icon-btn" id="themeBtn" title="Theme">🌙</button>
-      <a href="#contact" class="btn btn-primary" data-i18n="nav.cta">Užsisakyti demo</a>
+      <a href="#pricing" class="btn btn-primary" data-i18n="nav.cta">Rinktis planą</a>
     </div>
   </div>
 </header>
@@ -277,7 +281,7 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
       <h1 data-i18n="hero.h1">Visa gamyba — <span class="grad">vienoje sistemoje</span></h1>
       <p class="lead" data-i18n="hero.lead">Nuo medžiagos pjovimo optimizavimo iki gamybos valdymo ir sandėlio. FabSuite — vienos šeimos įrankiai baldų ir gaminių gamykloms, gimę realiame ceche, o ne biure.</p>
       <div class="hero-cta">
-        <a href="#contact" class="btn btn-primary" data-i18n="hero.cta1">Užsisakyti demo</a>
+        <a href="#pricing" class="btn btn-primary" data-i18n="hero.cta1">Rinktis planą</a>
         <a href="#demo" class="btn btn-ghost" data-i18n="hero.cta2">Pamatyti veikiant</a>
       </div>
       <div class="hero-trust">
@@ -536,63 +540,53 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
 <section id="pricing">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow" data-i18n="price.eyebrow">Kainodara</span>
-      <h2 data-i18n="price.h2">Skaidri kaina pagal jūsų dydį</h2>
-      <p data-i18n="price.sub">Mokate tik už tai, ką naudojate. Be ilgalaikių įsipareigojimų.</p>
+      <span class="eyebrow" data-i18n="price.eyebrow">Kainos</span>
+      <h2 data-i18n="price.h2">Pasirinkite planą ir pradėkite</h2>
+      <p data-i18n="price.sub">Pilna sistema — Nesting + Gamybos valdymas. Be sutarčių, atsisakykite bet kada.</p>
     </div>
-    <div class="prices">
+    <div class="prices two">
       <div class="price reveal">
-        <h3 data-i18n="price.t1.name">Modulis</h3>
-        <div class="sub" data-i18n="price.t1.sub">Vienas įrankis — Nesting arba Gamybos valdymas.</div>
-        <div class="amt" data-price="module"><small data-i18n="price.from">nuo</small> — €<small data-i18n="price.permo">/mėn</small></div>
+        <h3 data-i18n="price.t1.name">Pradžia</h3>
+        <span class="seats" data-i18n="price.t1.seats">iki 3 vietų</span>
+        <div class="amt" data-price="start"></div>
         <ul>
-          <li data-i18n="price.t1.l1">1 modulis pasirinktinai</li>
-          <li data-i18n="price.t1.l2">Iki 5 vartotojų</li>
-          <li data-i18n="price.t1.l3">Debesis ir atnaujinimai</li>
-          <li data-i18n="price.t1.l4">El. pašto palaikymas</li>
+          <li data-i18n="price.t1.l1">Nesting + Gamybos valdymas</li>
+          <li data-i18n="price.t1.l2">Iki 3 vartotojų</li>
+          <li data-i18n="price.t1.l3">Bendras sandėlis ir duomenys</li>
+          <li data-i18n="price.t1.l4">QR / Zebra etiketės</li>
+          <li data-i18n="price.t1.l5">Debesis ir atnaujinimai</li>
         </ul>
-        <a href="#contact" class="btn btn-ghost" data-i18n="price.cta">Susisiekti</a>
+        <a class="btn btn-ghost" data-buy="start" data-i18n="price.buy">Pirkti</a>
+        <a class="price-alt" data-link="demo" data-i18n="price.ordemo">arba užsisakyti demo</a>
       </div>
       <div class="price feat reveal">
         <span class="pop" data-i18n="price.popular">Populiariausia</span>
-        <h3 data-i18n="price.t2.name">Visa sistema</h3>
-        <div class="sub" data-i18n="price.t2.sub">Nesting + Gamybos valdymas, bendras sandėlis.</div>
-        <div class="amt" data-price="suite"><small data-i18n="price.from">nuo</small> — €<small data-i18n="price.permo">/mėn</small></div>
+        <h3 data-i18n="price.t2.name">Komanda</h3>
+        <span class="seats" data-i18n="price.t2.seats">iki 5 vietų</span>
+        <div class="amt" data-price="team"></div>
         <ul>
-          <li data-i18n="price.t2.l1">Visi veikiantys moduliai</li>
-          <li data-i18n="price.t2.l2">Iki 20 vartotojų</li>
-          <li data-i18n="price.t2.l3">QR / Zebra etiketės</li>
-          <li data-i18n="price.t2.l4">Duomenų importas (Excel)</li>
-          <li data-i18n="price.t2.l5">Pirmenybinis palaikymas</li>
+          <li data-i18n="price.t2.l1">Viskas, kas „Pradžia“ plane</li>
+          <li data-i18n="price.t2.l2">Iki 5 vartotojų</li>
+          <li data-i18n="price.t2.l3">Excel importas ir ataskaitos</li>
+          <li data-i18n="price.t2.l4">Pirmenybinis palaikymas</li>
+          <li data-i18n="price.t2.l5">Pagalba paleidžiant</li>
         </ul>
-        <a href="#contact" class="btn btn-primary" data-i18n="price.cta2">Užsisakyti demo</a>
-      </div>
-      <div class="price reveal">
-        <h3 data-i18n="price.t3.name">Gamykla</h3>
-        <div class="sub" data-i18n="price.t3.sub">Didelėms komandoms su individualiais poreikiais.</div>
-        <div class="amt" data-i18n="price.custom">Individualu</div>
-        <ul>
-          <li data-i18n="price.t3.l1">Neribotai vartotojų</li>
-          <li data-i18n="price.t3.l2">Integracijos pagal poreikį</li>
-          <li data-i18n="price.t3.l3">Mokymai vietoje</li>
-          <li data-i18n="price.t3.l4">Dedikuotas palaikymas</li>
-          <li data-i18n="price.t3.l5">Būsimi moduliai (Pasiūlymai, CRM)</li>
-        </ul>
-        <a href="#contact" class="btn btn-ghost" data-i18n="price.cta">Susisiekti</a>
+        <a class="btn btn-primary" data-buy="team" data-i18n="price.buy">Pirkti</a>
+        <a class="price-alt" data-link="demo" data-i18n="price.ordemo">arba užsisakyti demo</a>
       </div>
     </div>
-    <p class="price-note" data-i18n="price.note">* Tikslią kainą pateiksime po trumpo pokalbio apie jūsų gamyklą.</p>
+    <p class="price-note" data-i18n="price.note">Po apmokėjimo iškart sukuriama paskyra — pradėkite dirbti tą pačią dieną. Kainos be PVM; metinis planas pigesnis. Reikia daugiau vietų? Užsisakykite demo.</p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <div class="band reveal">
-      <h2 data-i18n="cta.h2">Pasiruošę sumažinti atliekas ir suvaldyti gamybą?</h2>
-      <p data-i18n="cta.p">Užsisakykite nemokamą demo — parodysime, kaip FabSuite veiks būtent jūsų ceche.</p>
+      <h2 data-i18n="cta.h2">Pasiruošę pradėti?</h2>
+      <p data-i18n="cta.p">Pasirinkite planą, susikurkite paskyrą ir dirbkite jau šiandien.</p>
       <div class="hero-cta" style="justify-content:center">
-        <a href="#contact" class="btn btn-primary" data-i18n="cta.b1">Užsisakyti demo</a>
-        <a href="mailto:gervdalius@gmail.com?subject=FabSuite%20kainodara" class="btn btn-ghost" data-i18n="cta.b2">Klausti kainos</a>
+        <a href="#pricing" class="btn btn-primary" data-i18n="cta.b1">Rinktis planą</a>
+        <a class="btn btn-ghost" data-link="demo" data-i18n="cta.b2">Užsisakyti demo</a>
       </div>
     </div>
   </div>
@@ -601,11 +595,11 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
 <section id="contact">
   <div class="wrap contact-grid">
     <div class="contact-side reveal">
-      <span class="eyebrow" data-i18n="con.eyebrow">Kontaktai</span>
-      <h2 data-i18n="con.h2">Pakalbėkime apie jūsų gamybą</h2>
-      <p class="muted" data-i18n="con.sub">Užpildykite formą arba parašykite tiesiogiai — atsakysime per 1 darbo dieną.</p>
+      <span class="eyebrow" data-i18n="con.eyebrow">Demo</span>
+      <h2 data-i18n="con.h2">Užsisakykite nemokamą demo</h2>
+      <p class="muted" data-i18n="con.sub">Norite pamatyti prieš pirkdami? Užpildykite formą — parodysime sistemą gyvai per 1 darbo dieną.</p>
+      <div class="row"><span class="ci">🛒</span><div><b data-i18n="con.buy">Pirkti iškart</b><a class="link" href="#pricing" data-i18n="con.buyv">Rinkitės planą ir pradėkite</a></div></div>
       <div class="row"><span class="ci">✉️</span><div><b data-i18n="con.email">El. paštas</b><a class="link" href="mailto:gervdalius@gmail.com">gervdalius@gmail.com</a></div></div>
-      <div class="row"><span class="ci">🌍</span><div><b data-i18n="con.lang">Kalbos</b><span class="muted">Lietuvių · English</span></div></div>
       <div class="row"><span class="ci">⚡</span><div><b data-i18n="con.live">Statusas</b><span class="muted" data-i18n="con.livev">Nesting ir Gamybos valdymas — jau veikia</span></div></div>
     </div>
     <form class="form reveal" id="demoForm">
@@ -651,16 +645,24 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
 /* ===== Brand (edit here to rename everywhere) ===== */
 const BRAND = "FabSuite";
 
-/* ===== Pricing (fill in real numbers; "—" shows a dash until set) ===== */
-const PRICES = { module: "39", suite: "99" };   // monthly EUR; "—" => "By quote"
+/* ===== Pricing (monthly EUR per plan; "—" => "By quote") ===== */
+const PRICES = { start: "69", team: "99" };
+
+/* ===== Self-serve links — fill in later (Stripe Payment Links, signup URL, etc.) =====
+   Until a real "buy" URL is set (stays "#"), buy buttons fall back to the demo action. */
+const LINKS = {
+  buyStart: "#",   // 3-seat plan checkout (e.g. Stripe Payment Link)
+  buyTeam:  "#",   // 5-seat plan checkout
+  demo:     "mailto:gervdalius@gmail.com?subject=FabSuite%20demo"
+};
 
 /* ===== i18n ===== */
 const I18N = {
-  "nav.products":["Produktai","Products"],"nav.demo":["Peržiūra","Preview"],"nav.features":["Funkcijos","Features"],"nav.pricing":["Kainos","Pricing"],"nav.contact":["Kontaktai","Contact"],"nav.cta":["Užsisakyti demo","Book a demo"],
+  "nav.products":["Produktai","Products"],"nav.demo":["Peržiūra","Preview"],"nav.features":["Funkcijos","Features"],"nav.pricing":["Kainos","Pricing"],"nav.contact":["Kontaktai","Contact"],"nav.cta":["Rinktis planą","Choose a plan"],
   "hero.badge":["Sukurta ir naudojama realioje baldų gamykloje","Built and used in a real furniture factory"],
   "hero.h1":['Visa gamyba — <span class="grad">vienoje sistemoje</span>','All production — <span class="grad">in one system</span>'],
   "hero.lead":["Nuo medžiagos pjovimo optimizavimo iki gamybos valdymo ir sandėlio. FabSuite — vienos šeimos įrankiai baldų ir gaminių gamykloms, gimę realiame ceche, o ne biure.","From material cut optimization to production management and stock. FabSuite is one family of tools for furniture and product manufacturers — born on a real shop floor, not in an office."],
-  "hero.cta1":["Užsisakyti demo","Book a demo"],"hero.cta2":["Pamatyti veikiant","See it in action"],
+  "hero.cta1":["Rinktis planą","Choose a plan"],"hero.cta2":["Pamatyti veikiant","See it in action"],
   "hero.t1":["mažiau medžiagų atliekų*","less material waste*"],"hero.t2":["dvikalbė sąsaja","bilingual interface"],"hero.t3":["veikiantys produktai","live products"],
   "mock.k1":["Išnaudojimas","Yield"],"mock.k2":["Atraižos","Offcuts"],"mock.k3":["Plokščių","Sheets"],
   "proof.t":['🏭 <b>Naudojama kasdien</b> realioje baldų gamyboje · 🌐 <b>LT / EN</b> · ☁️ Debesyje (Supabase) · 🔗 SWOOD · DXF · Excel · QR','🏭 <b>Used daily</b> in real furniture production · 🌐 <b>LT / EN</b> · ☁️ Cloud (Supabase) · 🔗 SWOOD · DXF · Excel · QR'],
@@ -697,14 +699,13 @@ const I18N = {
   "how.s1.t":["Demo ir poreikių analizė","Demo & needs review"],"how.s1.d":["Parodome sistemą gyvai ir aptariame jūsų gamybos procesą.","We show the system live and review your production process."],
   "how.s2.t":["Pritaikymas ir duomenys","Setup & data"],"how.s2.d":["Sukonfigūruojame vartotojus, sandėlį ir importuojame jūsų duomenis.","We configure users, stock and import your data."],
   "how.s3.t":["Gamyba","Go live"],"how.s3.d":["Komanda dirba realiu laiku — su mokymais ir palaikymu.","Your team works in real time — with training and support."],
-  "price.eyebrow":["Kainodara","Pricing"],"price.h2":["Skaidri kaina pagal jūsų dydį","Transparent pricing for your size"],"price.sub":["Mokate tik už tai, ką naudojate. Be ilgalaikių įsipareigojimų.","Pay only for what you use. No long-term lock-in."],
-  "price.from":["nuo","from"],"price.permo":["/mėn","/mo"],"price.custom":["Individualu","Custom"],"price.popular":["Populiariausia","Most popular"],"price.cta":["Susisiekti","Contact us"],"price.cta2":["Užsisakyti demo","Book a demo"],
-  "price.t1.name":["Modulis","Module"],"price.t1.sub":["Vienas įrankis — Nesting arba Gamybos valdymas.","One tool — Nesting or Production management."],"price.t1.l1":["1 modulis pasirinktinai","1 module of your choice"],"price.t1.l2":["Iki 5 vartotojų","Up to 5 users"],"price.t1.l3":["Debesis ir atnaujinimai","Cloud & updates"],"price.t1.l4":["El. pašto palaikymas","Email support"],
-  "price.t2.name":["Visa sistema","Full suite"],"price.t2.sub":["Nesting + Gamybos valdymas, bendras sandėlis.","Nesting + Production management, shared stock."],"price.t2.l1":["Visi veikiantys moduliai","All live modules"],"price.t2.l2":["Iki 20 vartotojų","Up to 20 users"],"price.t2.l3":["QR / Zebra etiketės","QR / Zebra labels"],"price.t2.l4":["Duomenų importas (Excel)","Data import (Excel)"],"price.t2.l5":["Pirmenybinis palaikymas","Priority support"],
-  "price.t3.name":["Gamykla","Factory"],"price.t3.sub":["Didelėms komandoms su individualiais poreikiais.","For large teams with custom needs."],"price.t3.l1":["Neribotai vartotojų","Unlimited users"],"price.t3.l2":["Integracijos pagal poreikį","Integrations on request"],"price.t3.l3":["Mokymai vietoje","On-site training"],"price.t3.l4":["Dedikuotas palaikymas","Dedicated support"],"price.t3.l5":["Būsimi moduliai (Pasiūlymai, CRM)","Future modules (Offers, CRM)"],
-  "price.note":["Kainos nurodytos be PVM. Metinis planas pigesnis — nuo €29/mėn. „Gamykla“ — individuali kaina pagal poreikius.","Prices shown excl. VAT. Annual plan is cheaper — from €29/mo. “Factory” tier is priced individually."],
-  "cta.h2":["Pasiruošę sumažinti atliekas ir suvaldyti gamybą?","Ready to cut waste and take control of production?"],"cta.p":["Užsisakykite nemokamą demo — parodysime, kaip FabSuite veiks būtent jūsų ceche.","Book a free demo — we'll show how FabSuite fits your shop."],"cta.b1":["Užsisakyti demo","Book a demo"],"cta.b2":["Klausti kainos","Ask about pricing"],
-  "con.eyebrow":["Kontaktai","Contact"],"con.h2":["Pakalbėkime apie jūsų gamybą","Let's talk about your production"],"con.sub":["Užpildykite formą arba parašykite tiesiogiai — atsakysime per 1 darbo dieną.","Fill the form or email us directly — we reply within 1 business day."],"con.email":["El. paštas","Email"],"con.lang":["Kalbos","Languages"],"con.live":["Statusas","Status"],"con.livev":["Nesting ir Gamybos valdymas — jau veikia","Nesting and Production management — live now"],
+  "price.eyebrow":["Kainos","Pricing"],"price.h2":["Pasirinkite planą ir pradėkite","Pick a plan and get started"],"price.sub":["Pilna sistema — Nesting + Gamybos valdymas. Be sutarčių, atsisakykite bet kada.","Full suite — Nesting + Production management. No contracts, cancel anytime."],
+  "price.from":["nuo","from"],"price.permo":["/mėn","/mo"],"price.popular":["Populiariausia","Most popular"],"price.buy":["Pirkti","Buy now"],"price.ordemo":["arba užsisakyti demo","or book a demo"],
+  "price.t1.name":["Pradžia","Starter"],"price.t1.seats":["iki 3 vietų","up to 3 seats"],"price.t1.l1":["Nesting + Gamybos valdymas","Nesting + Production management"],"price.t1.l2":["Iki 3 vartotojų","Up to 3 users"],"price.t1.l3":["Bendras sandėlis ir duomenys","Shared stock and data"],"price.t1.l4":["QR / Zebra etiketės","QR / Zebra labels"],"price.t1.l5":["Debesis ir atnaujinimai","Cloud & updates"],
+  "price.t2.name":["Komanda","Team"],"price.t2.seats":["iki 5 vietų","up to 5 seats"],"price.t2.l1":['Viskas, kas „Pradžia“ plane',"Everything in Starter"],"price.t2.l2":["Iki 5 vartotojų","Up to 5 users"],"price.t2.l3":["Excel importas ir ataskaitos","Excel import and reports"],"price.t2.l4":["Pirmenybinis palaikymas","Priority support"],"price.t2.l5":["Pagalba paleidžiant","Onboarding help"],
+  "price.note":["Po apmokėjimo iškart sukuriama paskyra — pradėkite dirbti tą pačią dieną. Kainos be PVM; metinis planas pigesnis. Reikia daugiau vietų? Užsisakykite demo.","Your account is created right after payment — start working the same day. Prices excl. VAT; annual is cheaper. Need more seats? Book a demo."],
+  "cta.h2":["Pasiruošę pradėti?","Ready to start?"],"cta.p":["Pasirinkite planą, susikurkite paskyrą ir dirbkite jau šiandien.","Pick a plan, create your account, and work today."],"cta.b1":["Rinktis planą","Choose a plan"],"cta.b2":["Užsisakyti demo","Book a demo"],
+  "con.eyebrow":["Demo","Demo"],"con.h2":["Užsisakykite nemokamą demo","Book a free demo"],"con.sub":["Norite pamatyti prieš pirkdami? Užpildykite formą — parodysime sistemą gyvai per 1 darbo dieną.","Want to see it before buying? Fill the form — we'll show it live within 1 business day."],"con.buy":["Pirkti iškart","Buy now"],"con.buyv":["Rinkitės planą ir pradėkite","Pick a plan and start"],"con.email":["El. paštas","Email"],"con.live":["Statusas","Status"],"con.livev":["Nesting ir Gamybos valdymas — jau veikia","Nesting and Production management — live now"],
   "form.name":["Vardas","Name"],"form.company":["Įmonė","Company"],"form.email":["El. paštas","Email"],"form.interest":["Dominantis produktas","Product of interest"],"form.opt.all":["Visa sistema","Whole suite"],"form.opt.nest":["Nesting","Nesting"],"form.opt.prod":["Gamybos valdymas","Production management"],"form.opt.soon":["Pasiūlymai / CRM","Offers / CRM"],"form.msg":["Žinutė","Message"],"form.send":["Siųsti užklausą","Send request"],
   "foot.copy":["© 2026 FabSuite. Gamybos programinė įranga.","© 2026 FabSuite. Manufacturing software."]
 };
@@ -784,7 +785,21 @@ const layoutB=[[5,6,40,52],[48,6,46,30],[48,40,30,52],[80,40,14,30],[5,60,38,34]
 const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.12});
 document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 
-applyLang();applyTheme();
+/* Self-serve link wiring */
+function wireLinks(){
+  const buy={start:LINKS.buyStart, team:LINKS.buyTeam};
+  document.querySelectorAll("[data-buy]").forEach(a=>{
+    const url=buy[a.getAttribute("data-buy")];
+    const live=url&&url!=="#";
+    a.setAttribute("href", live?url:LINKS.demo); // until a real checkout link is set, capture intent via demo
+    if(live){a.target="_blank";a.rel="noopener";}
+  });
+  document.querySelectorAll("[data-link]").forEach(a=>{
+    a.setAttribute("href", LINKS[a.getAttribute("data-link")]||"#");
+  });
+}
+
+applyLang();applyTheme();wireLinks();
 </script>
 </body>
 </html>
