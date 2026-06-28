@@ -53,6 +53,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .icon-btn{height:38px;min-width:38px;padding:0 10px;border-radius:10px;border:1px solid var(--border-2);background:var(--surface);color:var(--text);cursor:pointer;font-size:14px;font-weight:600;display:grid;place-items:center;transition:background .15s}
 .icon-btn:hover{background:var(--surface-2)}
+.lang-sel{appearance:none;-webkit-appearance:none;padding:0 12px;text-align:center;text-align-last:center;font-family:var(--font)}
 
 /* Hero */
 .hero{position:relative;overflow:hidden;padding:84px 0 64px}
@@ -268,7 +269,9 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
       <a href="#contact" data-i18n="nav.contact">Kontaktai</a>
     </nav>
     <div class="nav-right">
-      <button class="icon-btn" id="langBtn" title="Language">EN</button>
+      <select class="icon-btn lang-sel" id="langSel" title="Language" aria-label="Language">
+        <option value="lt">LT</option><option value="en">EN</option><option value="de">DE</option><option value="es">ES</option>
+      </select>
       <button class="icon-btn" id="themeBtn" title="Theme">🌙</button>
       <a href="#pricing" class="btn btn-primary" data-i18n="nav.cta">Rinktis planą</a>
     </div>
@@ -288,12 +291,12 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
       </div>
       <div class="hero-trust">
         <div><b>−15%</b><span data-i18n="hero.t1">mažiau medžiagų atliekų*</span></div>
-        <div><b>LT / EN</b><span data-i18n="hero.t2">dvikalbė sąsaja</span></div>
+        <div><b>4</b><span data-i18n="hero.t2">kalbų sąsaja</span></div>
         <div><b>2</b><span data-i18n="hero.t3">veikiantys produktai</span></div>
       </div>
     </div>
     <div class="appwin" aria-hidden="true">
-      <div class="appbar"><i></i><i></i><i></i><span class="ttl" data-brand-suffix>FabSuite · Nesting</span><span class="pill">2800×2070 · MDF 18mm</span></div>
+      <div class="appbar"><i></i><i></i><i></i><span class="ttl"><span data-brand>FabSuite</span> · <span data-i18n="app.nesting">Nesting</span></span><span class="pill">2800×2070 · MDF 18mm</span></div>
       <div class="sheets">
         <div class="sheet" id="sheetA"></div>
         <div class="sheet" id="sheetB"></div>
@@ -395,7 +398,7 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
     <!-- Nesting panel -->
     <div class="panel active" id="t-nest">
       <div class="appwin">
-        <div class="appbar"><i></i><i></i><i></i><span class="ttl" data-brand-suffix>FabSuite · Nesting</span><span class="pill" data-i18n="demo.nest.pill">Užsakymas #1042</span></div>
+        <div class="appbar"><i></i><i></i><i></i><span class="ttl"><span data-brand>FabSuite</span> · <span data-i18n="app.nesting">Nesting</span></span><span class="pill" data-i18n="demo.nest.pill">Užsakymas #1042</span></div>
         <div class="demo-body demo-split">
           <div class="appwin" style="box-shadow:none">
             <div class="sheets" style="padding:14px"><div class="sheet" id="sheetC"></div><div class="sheet" id="sheetD"></div></div>
@@ -430,7 +433,7 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
     <!-- Production panel -->
     <div class="panel" id="t-prod">
       <div class="appwin">
-        <div class="appbar"><i></i><i></i><i></i><span class="ttl" data-brand-suffix>FabSuite · Gamybos valdymas</span><span class="pill" data-i18n="demo.prod.pill">Kanban</span></div>
+        <div class="appbar"><i></i><i></i><i></i><span class="ttl"><span data-brand>FabSuite</span> · <span data-i18n="app.prod">Gamybos valdymas</span></span><span class="pill" data-i18n="demo.prod.pill">Kanban</span></div>
         <div class="demo-body">
           <div class="kanban">
             <div class="kcol">
@@ -466,7 +469,7 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
     <!-- Warehouse panel -->
     <div class="panel" id="t-wh">
       <div class="appwin">
-        <div class="appbar"><i></i><i></i><i></i><span class="ttl" data-brand-suffix>FabSuite · Sandėlis</span><span class="pill" data-i18n="demo.wh.pill">Plokščių likučiai</span></div>
+        <div class="appbar"><i></i><i></i><i></i><span class="ttl"><span data-brand>FabSuite</span> · <span data-i18n="app.wh">Sandėlis</span></span><span class="pill" data-i18n="demo.wh.pill">Plokščių likučiai</span></div>
         <div class="demo-body">
           <table class="dtable">
             <thead><tr>
@@ -676,104 +679,113 @@ const LINKS = {
 
 /* ===== i18n ===== */
 const I18N = {
-  "nav.products":["Produktai","Products"],"nav.demo":["Peržiūra","Preview"],"nav.features":["Funkcijos","Features"],"nav.pricing":["Kainos","Pricing"],"nav.contact":["Kontaktai","Contact"],"nav.cta":["Rinktis planą","Choose a plan"],
-  "hero.badge":["Sukurta ir naudojama realioje baldų gamykloje","Built and used in a real furniture factory"],
-  "hero.h1":['Visa gamyba — <span class="grad">vienoje sistemoje</span>','All production — <span class="grad">in one system</span>'],
-  "hero.lead":["Nuo medžiagos pjovimo optimizavimo iki gamybos valdymo ir sandėlio. FabSuite — vienos šeimos įrankiai baldų ir gaminių gamykloms, gimę realiame ceche, o ne biure.","From material cut optimization to production management and stock. FabSuite is one family of tools for furniture and product manufacturers — born on a real shop floor, not in an office."],
-  "hero.cta1":["Rinktis planą","Choose a plan"],"hero.cta2":["Pamatyti veikiant","See it in action"],
-  "hero.t1":["mažiau medžiagų atliekų*","less material waste*"],"hero.t2":["dvikalbė sąsaja","bilingual interface"],"hero.t3":["veikiantys produktai","live products"],
-  "mock.k1":["Išnaudojimas","Yield"],"mock.k2":["Atraižos","Offcuts"],"mock.k3":["Plokščių","Sheets"],
-  "proof.t":['🏭 <b>Naudojama kasdien</b> realioje baldų gamyboje · 🌐 <b>LT / EN</b> · ☁️ Debesyje (Supabase) · 🔗 SWOOD · DXF · Excel · QR','🏭 <b>Used daily</b> in real furniture production · 🌐 <b>LT / EN</b> · ☁️ Cloud (Supabase) · 🔗 SWOOD · DXF · Excel · QR'],
-  "prod.eyebrow":["Produktai","Products"],"prod.h2":["Du veikiantys įrankiai. Daugiau jau kuriama.","Two live tools. More on the way."],"prod.sub":["Kiekvienas modulis veikia savarankiškai arba kartu — bendri vartotojai, sandėlis ir duomenys.","Each module works standalone or together — shared users, stock and data."],
-  "prod.live":["Veikia","Live"],"prod.soon":["Netrukus","Coming soon"],
-  "prod.n.tag":["Pjovimo optimizavimas","Cut optimization"],"prod.n.title":["Nesting","Nesting"],"prod.n.desc":["Tikros formos plokščių išdėstymas, kuris sumažina atliekas ir taupo medžiagą kiekvienam užsakymui.","True-shape sheet layout that cuts waste and saves material on every order."],
-  "prod.n.l1":["SWOOD pjovimo sąrašų importas","SWOOD cut-list import"],"prod.n.l2":["Tikros formos nesting (SVGnest) maksimaliam išnaudojimui","True-shape nesting (SVGnest) for maximum yield"],"prod.n.l3":["DXF eksportas į CNC","DXF export to CNC"],"prod.n.l4":["QR / Zebra etiketės","QR / Zebra labels"],"prod.n.l5":["Atraižų ir likučių apskaita","Offcut and remnant tracking"],"prod.n.l6":["Su sandėliu susietos plokščių rezervacijos","Warehouse-linked sheet reservations"],
-  "prod.d.tag":["Gamybos valdymas","Production management"],"prod.d.title":["Gamybos valdymas","Production management"],"prod.d.desc":["Projektai, užduotys, etapai ir sandėlis vienoje vietoje — nuo užsakymo iki išsiuntimo.","Projects, tasks, steps and stock in one place — from order to shipment."],
-  "prod.d.l1":["Projektai, užduotys ir gamybos etapai","Projects, tasks and production steps"],"prod.d.l2":["Komanda, rolės ir teisės","Team, roles and permissions"],"prod.d.l3":["Sandėlis, atsargos ir medžiagų poreikis","Warehouse, stock and material needs"],"prod.d.l4":["Kanban, srautas (pipeline) ir Gantt vaizdai","Kanban, pipeline and Gantt views"],"prod.d.l5":["Surinkimo sąrašai, pakavimo lapai, QR","Assembly lists, packing slips, QR"],"prod.d.l6":["Excel importas, PDF ir ataskaitos","Excel import, PDF and reports"],
-  "prod.o.tag":["Pardavimai","Sales"],"prod.o.title":["Pasiūlymai","Offers"],"prod.o.desc":["Greitas pasiūlymų ir kainos skaičiavimas tiesiai iš gamybos duomenų.","Fast quotes and pricing straight from production data."],"prod.o.l1":["Automatinis kainos skaičiavimas","Automatic price calculation"],"prod.o.l2":["Pasiūlymai PDF formatu","Quotes as PDF"],"prod.o.l3":["Susiejimas su gamybos užsakymais","Linked to production orders"],
-  "prod.c.title":["CRM","CRM"],"prod.c.desc":["Klientai, pardavimų piltuvas ir bendravimo istorija viename įrankyje.","Customers, sales pipeline and history in one tool."],"prod.c.l1":["Klientų kortelės ir kontaktai","Customer cards and contacts"],"prod.c.l2":["Pardavimų piltuvas","Sales pipeline"],"prod.c.l3":["Užsakymų ir pasiūlymų istorija","Order and quote history"],
-  "demo.eyebrow":["Peržiūra","Preview"],"demo.h2":["Pamatykite, kaip tai atrodo","See how it looks"],"demo.sub":["Tikri sistemos ekranai su pavyzdiniais duomenimis.","Real system screens with sample data."],
-  "demo.tab1":["🪚 Nesting","🪚 Nesting"],"demo.tab2":["🏭 Gamyba","🏭 Production"],"demo.tab3":["📦 Sandėlis","📦 Warehouse"],
-  "demo.nest.pill":["Užsakymas #1042","Order #1042"],"demo.nest.saved":["Sutaupyta","Saved"],"demo.nest.ply":["Beržo fanera","Birch plywood"],
-  "demo.nest.cap":["SWOOD importas → tikros formos nesting → DXF į CNC ir QR etiketės.","SWOOD import → true-shape nesting → DXF to CNC and QR labels."],
-  "demo.prod.pill":["Kanban + Gantt","Kanban + Gantt"],
-  "demo.gantt.h":["Savaitės planas","Week schedule"],"g.d1":["Pr","Mon"],"g.d2":["An","Tue"],"g.d3":["Tr","Wed"],"g.d4":["Kt","Thu"],"g.d5":["Pn","Fri"],
-  "demo.prod.cap":["Projektai juda etapais — nuo pjovimo iki išsiuntimo — su atsakingais darbuotojais ir terminais.","Projects move through stages — from cutting to shipping — with assignees and deadlines."],
-  "demo.wh.pill":["Plokščių likučiai","Sheet stock"],"demo.wh.cap":["Atraižos ir rezervacijos atsinaujina automatiškai po kiekvieno nesting'o.","Offcuts and reservations update automatically after every nesting run."],"demo.wh.oak":["Ąžuolo faneruotė","Oak veneer"],
-  "demo.j1":["Virtuvė — projektas #1042","Kitchen — project #1042"],"demo.j2":["Spinta su stumdomomis durimis","Wardrobe with sliding doors"],"demo.j3":["Biuro baldų komplektas","Office furniture set"],"demo.j4":["Vonios spintelės (x6)","Bathroom cabinets (x6)"],"demo.j5":["Prekystalis — kavinė","Counter — café"],"demo.j6":["Drabužinė — projektas #1031","Walk-in closet — project #1031"],"demo.j7":["TV sekcija","TV unit"],"demo.client3":["Privatus klientas","Private client"],
-  "mat.ldsp":["LDSP balta","White chipboard"],"co.ex":['UAB „Pavyzdys“',"Example Ltd"],"co.demo":['UAB „Demonstracija“',"Demo Ltd"],
-  "wh.p1":["38,50 €","€38.50"],"wh.p2":["29,90 €","€29.90"],"wh.p3":["9,20 €","€9.20"],"wh.p4":["64,00 €","€64.00"],"wh.p5":["112,00 €","€112.00"],
-  "kb.planned":["Planuojama","Planned"],"kb.progress":["Vykdoma","In progress"],"kb.done":["Atlikta","Done"],
-  "kb.cut":["Pjovimas","Cutting"],"kb.assembly":["Surinkimas","Assembly"],"kb.edge":["Kraštų klijavimas","Edge banding"],"kb.packed":["Supakuota","Packed"],"kb.shipped":["Išsiųsta","Shipped"],
-  "th.material":["Medžiaga","Material"],"th.thick":["Storis","Thick."],"th.parts":["Detalių","Parts"],"th.sheets":["Plokščių","Sheets"],"th.eff":["Išnaud.","Yield"],"th.sku":["Artikulas","SKU"],"th.stock":["Likutis","Stock"],"th.reserved":["Rezervuota","Reserved"],"th.price":["Kaina","Price"],"th.status":["Būsena","Status"],
-  "wh.ok":["Pakanka","In stock"],"wh.low":["Mažėja","Low"],
-  "feat.eyebrow":["Kodėl FabSuite","Why FabSuite"],"feat.h2":["Sukurta ceche, ne biure","Built on the floor, not in an office"],"feat.sub":["Kiekviena funkcija atsirado iš realių gamybos poreikių.","Every feature came from a real production need."],
-  "feat.f1.t":["Mažiau atliekų","Less waste"],"feat.f1.d":["Tikros formos nesting išspaudžia maksimalų plokštės išnaudojimą kiekvienam užsakymui.","True-shape nesting squeezes maximum yield from every sheet."],
-  "feat.f2.t":["Dvikalbė sąsaja","Bilingual"],"feat.f2.d":["Visa sistema lietuvių ir anglų kalbomis — tinka tarptautinėms komandoms.","The whole system in Lithuanian and English — fit for international teams."],
-  "feat.f3.t":["Debesyje","In the cloud"],"feat.f3.d":["Duomenys saugomi saugiai debesyje (Supabase) — prieiga iš bet kurios darbo vietos.","Data stored securely in the cloud (Supabase) — access from any workstation."],
-  "feat.f4.t":["Etiketės ir QR","Labels & QR"],"feat.f4.d":["Zebra etiketės ir QR kodai detalėms — greitas sekimas visame ceche.","Zebra labels and QR codes for parts — fast tracking across the floor."],
-  "feat.f5.t":["Integracijos","Integrations"],"feat.f5.d":["SWOOD, DXF, Excel ir PDF — įsilieja į esamą darbo eigą. Kitos integracijos — pagal poreikį.","SWOOD, DXF, Excel and PDF — fits your existing workflow. Other integrations on request."],
-  "feat.f6.t":["Vienas sandėlis","One warehouse"],"feat.f6.d":["Plokštės, atsargos ir rezervacijos bendros visiems moduliams — be dubliavimo.","Sheets, stock and reservations shared across modules — no duplication."],
-  "int.eyebrow":["Integracijos","Integrations"],"int.h2":["Veikia su tuo, ką jau naudojate","Works with what you already use"],"int.sub":["Reikia kažko kito? Integracijas galime pritaikyti pagal poreikį.","Need something else? We can build integrations on request."],"int.req":["+ pagal poreikį","+ on request"],
-  "how.eyebrow":["Kaip pradėti","Getting started"],"how.h2":["Paleidimas per tris žingsnius","Up and running in three steps"],
-  "how.s1.t":["Demo ir poreikių analizė","Demo & needs review"],"how.s1.d":["Parodome sistemą gyvai ir aptariame jūsų gamybos procesą.","We show the system live and review your production process."],
-  "how.s2.t":["Pritaikymas ir duomenys","Setup & data"],"how.s2.d":["Sukonfigūruojame vartotojus, sandėlį ir importuojame jūsų duomenis.","We configure users, stock and import your data."],
-  "how.s3.t":["Gamyba","Go live"],"how.s3.d":["Komanda dirba realiu laiku — su mokymais ir palaikymu.","Your team works in real time — with training and support."],
-  "price.eyebrow":["Kainos","Pricing"],"price.h2":["Pasirinkite, ko reikia","Pick what you need"],"price.sub":["Pirkite atskirą programą arba visą sistemą. Komplekte — daugiau už mažiau.","Buy a single app or the full suite. The bundle gives more for less."],
-  "price.permo":["/mėn","/mo"],"price.bestvalue":["Geriausia vertė","Best value"],"price.buy":["Pirkti","Buy now"],"price.ordemo":["arba užsisakyti demo","or book a demo"],"price.seats5":["iki 5 vietų","up to 5 seats"],
-  "pp.nest.name":["Nesting","Nesting"],"pp.nest.l1":["Pjovimo optimizavimas (true-shape)","Cut optimization (true-shape)"],"pp.nest.l2":["SWOOD importas, DXF į CNC","SWOOD import, DXF to CNC"],"pp.nest.l3":["QR / Zebra etiketės","QR / Zebra labels"],"pp.nest.l4":["Atraižų ir likučių apskaita","Offcut & remnant tracking"],"pp.nest.l5":["Iki 5 vartotojų","Up to 5 users"],
-  "pp.prod.name":["Gamybos valdymas","Production management"],"pp.prod.l1":["Projektai, užduotys, etapai","Projects, tasks, steps"],"pp.prod.l2":["Kanban, Gantt, pipeline","Kanban, Gantt, pipeline"],"pp.prod.l3":["Sandėlis ir medžiagų poreikis","Stock & material needs"],"pp.prod.l4":["Excel importas, PDF, ataskaitos","Excel import, PDF, reports"],"pp.prod.l5":["Iki 5 vartotojų","Up to 5 users"],
-  "pp.suite.name":["Visa sistema","Full suite"],"pp.suite.l1":["Nesting + Gamybos valdymas","Nesting + Production management"],"pp.suite.l2":["Bendras sandėlis (tik komplekte)","Shared warehouse (bundle only)"],"pp.suite.l3":["Pirmenybinis palaikymas","Priority support"],"pp.suite.l4":["Pagalba paleidžiant","Onboarding help"],"pp.suite.l5":["Iki 5 vartotojų","Up to 5 users"],
-  "price.note":["Pirkite atskirai arba komplekte. Po apmokėjimo iškart sukuriama paskyra — dirbkite tą pačią dieną. Kainos be PVM; metinis planas pigesnis.","Buy separately or bundled. Your account is created right after payment — work the same day. Prices excl. VAT; annual is cheaper."],
-  "cta.h2":["Pasiruošę pradėti?","Ready to start?"],"cta.p":["Pasirinkite planą, susikurkite paskyrą ir dirbkite jau šiandien.","Pick a plan, create your account, and work today."],"cta.b1":["Rinktis planą","Choose a plan"],"cta.b2":["Užsisakyti demo","Book a demo"],
-  "con.eyebrow":["Demo","Demo"],"con.h2":["Užsisakykite nemokamą demo","Book a free demo"],"con.sub":["Norite pamatyti prieš pirkdami? Užpildykite formą — parodysime sistemą gyvai per 1 darbo dieną.","Want to see it before buying? Fill the form — we'll show it live within 1 business day."],"con.buy":["Pirkti iškart","Buy now"],"con.buyv":["Rinkitės planą ir pradėkite","Pick a plan and start"],"con.email":["El. paštas","Email"],"con.live":["Statusas","Status"],"con.livev":["Nesting ir Gamybos valdymas — jau veikia","Nesting and Production management — live now"],
-  "form.name":["Vardas","Name"],"form.company":["Įmonė","Company"],"form.email":["El. paštas","Email"],"form.interest":["Dominantis produktas","Product of interest"],"form.opt.all":["Visa sistema","Whole suite"],"form.opt.nest":["Nesting","Nesting"],"form.opt.prod":["Gamybos valdymas","Production management"],"form.opt.soon":["Pasiūlymai / CRM","Offers / CRM"],"form.msg":["Žinutė","Message"],"form.send":["Siųsti užklausą","Send request"],
-  "foot.copy":["© 2026 FabSuite. Gamybos programinė įranga.","© 2026 FabSuite. Manufacturing software."]
+  "nav.products":["Produktai","Products","Produkte","Productos"],"nav.demo":["Peržiūra","Preview","Vorschau","Vista previa"],"nav.features":["Funkcijos","Features","Funktionen","Funciones"],"nav.pricing":["Kainos","Pricing","Preise","Precios"],"nav.contact":["Kontaktai","Contact","Kontakt","Contacto"],"nav.cta":["Rinktis planą","Choose a plan","Plan wählen","Elegir plan"],
+  "hero.badge":["Sukurta ir naudojama realioje baldų gamykloje","Built and used in a real furniture factory","Entwickelt und im Einsatz in einer echten Möbelfabrik","Creado y usado en una fábrica de muebles real"],
+  "hero.h1":['Visa gamyba — <span class="grad">vienoje sistemoje</span>','All production — <span class="grad">in one system</span>','Die ganze Produktion — <span class="grad">in einem System</span>','Toda la producción — <span class="grad">en un sistema</span>'],
+  "hero.lead":["Nuo medžiagos pjovimo optimizavimo iki gamybos valdymo ir sandėlio. FabSuite — vienos šeimos įrankiai baldų ir gaminių gamykloms, gimę realiame ceche, o ne biure.","From material cut optimization to production management and stock. FabSuite is one family of tools for furniture and product manufacturers — born on a real shop floor, not in an office.","Von der Zuschnitt-Optimierung bis zur Produktionssteuerung und Lagerverwaltung. FabSuite ist eine Werkzeugfamilie für Möbel- und Produkthersteller — entstanden in einer echten Werkstatt, nicht im Büro.","Desde la optimización de corte hasta la gestión de producción y el almacén. FabSuite es una familia de herramientas para fabricantes de muebles y productos, nacida en un taller real, no en una oficina."],
+  "hero.cta1":["Rinktis planą","Choose a plan","Plan wählen","Elegir plan"],"hero.cta2":["Pamatyti veikiant","See it in action","In Aktion sehen","Verlo en acción"],
+  "hero.t1":["mažiau medžiagų atliekų*","less material waste*","weniger Materialverschnitt*","menos desperdicio de material*"],"hero.t2":["kalbų sąsaja","interface languages","Oberflächensprachen","idiomas de interfaz"],"hero.t3":["veikiantys produktai","live products","aktive Produkte","productos activos"],
+  "mock.k1":["Išnaudojimas","Yield","Ausnutzung","Aprovechamiento"],"mock.k2":["Atraižos","Offcuts","Verschnitt","Recortes"],"mock.k3":["Plokščių","Sheets","Platten","Tableros"],
+  "proof.t":['🏭 <b>Naudojama kasdien</b> realioje baldų gamyboje · 🌐 <b>LT · EN · DE · ES</b> · ☁️ Debesyje (Supabase) · 🔗 SWOOD · DXF · Excel · QR','🏭 <b>Used daily</b> in real furniture production · 🌐 <b>LT · EN · DE · ES</b> · ☁️ Cloud (Supabase) · 🔗 SWOOD · DXF · Excel · QR','🏭 <b>Täglich im Einsatz</b> in der echten Möbelproduktion · 🌐 <b>LT · EN · DE · ES</b> · ☁️ Cloud (Supabase) · 🔗 SWOOD · DXF · Excel · QR','🏭 <b>Usado a diario</b> en producción real de muebles · 🌐 <b>LT · EN · DE · ES</b> · ☁️ Nube (Supabase) · 🔗 SWOOD · DXF · Excel · QR'],
+  "prod.eyebrow":["Produktai","Products","Produkte","Productos"],"prod.h2":["Du veikiantys įrankiai. Daugiau jau kuriama.","Two live tools. More on the way.","Zwei aktive Tools. Weitere folgen.","Dos herramientas activas. Más en camino."],"prod.sub":["Kiekvienas modulis veikia savarankiškai arba kartu — bendri vartotojai, sandėlis ir duomenys.","Each module works standalone or together — shared users, stock and data.","Jedes Modul funktioniert einzeln oder zusammen — gemeinsame Nutzer, Lager und Daten.","Cada módulo funciona solo o en conjunto — usuarios, stock y datos compartidos."],
+  "prod.live":["Veikia","Live","Aktiv","Activo"],"prod.soon":["Netrukus","Coming soon","Demnächst","Próximamente"],
+  "prod.n.tag":["Pjovimo optimizavimas","Cut optimization","Zuschnitt-Optimierung","Optimización de corte"],"prod.n.title":["Nesting","Nesting","Nesting","Nesting"],"prod.n.desc":["Tikros formos plokščių išdėstymas, kuris sumažina atliekas ir taupo medžiagą kiekvienam užsakymui.","True-shape sheet layout that cuts waste and saves material on every order.","Echtform-Schachtelung, die Verschnitt reduziert und bei jedem Auftrag Material spart.","Anidado de forma real que reduce el desperdicio y ahorra material en cada pedido."],
+  "prod.n.l1":["SWOOD pjovimo sąrašų importas","SWOOD cut-list import","SWOOD-Stücklistenimport","Importación de listas de corte SWOOD"],"prod.n.l2":["Tikros formos nesting (SVGnest) maksimaliam išnaudojimui","True-shape nesting (SVGnest) for maximum yield","Echtform-Schachtelung (SVGnest) für maximale Ausnutzung","Anidado de forma real (SVGnest) para máximo aprovechamiento"],"prod.n.l3":["DXF eksportas į CNC","DXF export to CNC","DXF-Export an CNC","Exportación DXF a CNC"],"prod.n.l4":["QR / Zebra etiketės","QR / Zebra labels","QR-/Zebra-Etiketten","Etiquetas QR / Zebra"],"prod.n.l5":["Atraižų ir likučių apskaita","Offcut and remnant tracking","Verschnitt- und Restenverwaltung","Control de recortes y restos"],"prod.n.l6":["Su sandėliu susietos plokščių rezervacijos","Warehouse-linked sheet reservations","Mit dem Lager verknüpfte Plattenreservierungen","Reservas de tableros vinculadas al almacén"],
+  "prod.d.tag":["Gamybos valdymas","Production management","Produktionssteuerung","Gestión de producción"],"prod.d.title":["Gamybos valdymas","Production management","Produktionssteuerung","Gestión de producción"],"prod.d.desc":["Projektai, užduotys, etapai ir sandėlis vienoje vietoje — nuo užsakymo iki išsiuntimo.","Projects, tasks, steps and stock in one place — from order to shipment.","Projekte, Aufgaben, Schritte und Lager an einem Ort — vom Auftrag bis zum Versand.","Proyectos, tareas, etapas y stock en un solo lugar — del pedido al envío."],
+  "prod.d.l1":["Projektai, užduotys ir gamybos etapai","Projects, tasks and production steps","Projekte, Aufgaben und Produktionsschritte","Proyectos, tareas y etapas de producción"],"prod.d.l2":["Komanda, rolės ir teisės","Team, roles and permissions","Team, Rollen und Berechtigungen","Equipo, roles y permisos"],"prod.d.l3":["Sandėlis, atsargos ir medžiagų poreikis","Warehouse, stock and material needs","Lager, Bestand und Materialbedarf","Almacén, stock y necesidades de material"],"prod.d.l4":["Kanban, srautas (pipeline) ir Gantt vaizdai","Kanban, pipeline and Gantt views","Kanban-, Pipeline- und Gantt-Ansichten","Vistas Kanban, pipeline y Gantt"],"prod.d.l5":["Surinkimo sąrašai, pakavimo lapai, QR","Assembly lists, packing slips, QR","Montagelisten, Lieferscheine, QR","Listas de montaje, albaranes, QR"],"prod.d.l6":["Excel importas, PDF ir ataskaitos","Excel import, PDF and reports","Excel-Import, PDF und Berichte","Importación Excel, PDF e informes"],
+  "prod.o.tag":["Pardavimai","Sales","Vertrieb","Ventas"],"prod.o.title":["Pasiūlymai","Offers","Angebote","Presupuestos"],"prod.o.desc":["Greitas pasiūlymų ir kainos skaičiavimas tiesiai iš gamybos duomenų.","Fast quotes and pricing straight from production data.","Schnelle Angebote und Preise direkt aus den Produktionsdaten.","Presupuestos y precios rápidos directamente desde los datos de producción."],"prod.o.l1":["Automatinis kainos skaičiavimas","Automatic price calculation","Automatische Preisberechnung","Cálculo de precios automático"],"prod.o.l2":["Pasiūlymai PDF formatu","Quotes as PDF","Angebote als PDF","Presupuestos en PDF"],"prod.o.l3":["Susiejimas su gamybos užsakymais","Linked to production orders","Verknüpft mit Produktionsaufträgen","Vinculado a órdenes de producción"],
+  "prod.c.title":["CRM","CRM","CRM","CRM"],"prod.c.desc":["Klientai, pardavimų piltuvas ir bendravimo istorija viename įrankyje.","Customers, sales pipeline and history in one tool.","Kunden, Vertriebs-Pipeline und Verlauf in einem Tool.","Clientes, embudo de ventas e historial en una sola herramienta."],"prod.c.l1":["Klientų kortelės ir kontaktai","Customer cards and contacts","Kundenkarten und Kontakte","Fichas de cliente y contactos"],"prod.c.l2":["Pardavimų piltuvas","Sales pipeline","Vertriebs-Pipeline","Embudo de ventas"],"prod.c.l3":["Užsakymų ir pasiūlymų istorija","Order and quote history","Auftrags- und Angebotsverlauf","Historial de pedidos y presupuestos"],
+  "demo.eyebrow":["Peržiūra","Preview","Vorschau","Vista previa"],"demo.h2":["Pamatykite, kaip tai atrodo","See how it looks","So sieht es aus","Mira cómo se ve"],"demo.sub":["Tikri sistemos ekranai su pavyzdiniais duomenimis.","Real system screens with sample data.","Echte Systemansichten mit Beispieldaten.","Pantallas reales del sistema con datos de ejemplo."],
+  "demo.tab1":["🪚 Nesting","🪚 Nesting","🪚 Nesting","🪚 Nesting"],"demo.tab2":["🏭 Gamyba","🏭 Production","🏭 Produktion","🏭 Producción"],"demo.tab3":["📦 Sandėlis","📦 Warehouse","📦 Lager","📦 Almacén"],
+  "demo.nest.pill":["Užsakymas #1042","Order #1042","Auftrag #1042","Pedido #1042"],"demo.nest.saved":["Sutaupyta","Saved","Gespart","Ahorrado"],"demo.nest.ply":["Beržo fanera","Birch plywood","Birkensperrholz","Contrachapado de abedul"],
+  "demo.nest.cap":["SWOOD importas → tikros formos nesting → DXF į CNC ir QR etiketės.","SWOOD import → true-shape nesting → DXF to CNC and QR labels.","SWOOD-Import → Echtform-Schachtelung → DXF an CNC und QR-Etiketten.","Importación SWOOD → anidado de forma real → DXF a CNC y etiquetas QR."],
+  "demo.prod.pill":["Kanban + Gantt","Kanban + Gantt","Kanban + Gantt","Kanban + Gantt"],
+  "demo.gantt.h":["Savaitės planas","Week schedule","Wochenplan","Plan semanal"],"g.d1":["Pr","Mon","Mo","Lun"],"g.d2":["An","Tue","Di","Mar"],"g.d3":["Tr","Wed","Mi","Mié"],"g.d4":["Kt","Thu","Do","Jue"],"g.d5":["Pn","Fri","Fr","Vie"],
+  "demo.prod.cap":["Projektai juda etapais — nuo pjovimo iki išsiuntimo — su atsakingais darbuotojais ir terminais.","Projects move through stages — from cutting to shipping — with assignees and deadlines.","Projekte durchlaufen Phasen — vom Zuschnitt bis zum Versand — mit Verantwortlichen und Terminen.","Los proyectos avanzan por etapas — del corte al envío — con responsables y plazos."],
+  "demo.wh.pill":["Plokščių likučiai","Sheet stock","Plattenbestand","Stock de tableros"],"demo.wh.cap":["Atraižos ir rezervacijos atsinaujina automatiškai po kiekvieno nesting'o.","Offcuts and reservations update automatically after every nesting run.","Verschnitt und Reservierungen werden nach jedem Schachtellauf automatisch aktualisiert.","Los recortes y reservas se actualizan automáticamente tras cada anidado."],"demo.wh.oak":["Ąžuolo faneruotė","Oak veneer","Eichenfurnier","Chapa de roble"],
+  "demo.j1":["Virtuvė — projektas #1042","Kitchen — project #1042","Küche — Projekt #1042","Cocina — proyecto #1042"],"demo.j2":["Spinta su stumdomomis durimis","Wardrobe with sliding doors","Schrank mit Schiebetüren","Armario con puertas correderas"],"demo.j3":["Biuro baldų komplektas","Office furniture set","Büromöbel-Set","Conjunto de muebles de oficina"],"demo.j4":["Vonios spintelės (x6)","Bathroom cabinets (x6)","Badezimmerschränke (x6)","Muebles de baño (x6)"],"demo.j5":["Prekystalis — kavinė","Counter — café","Theke — Café","Mostrador — cafetería"],"demo.j6":["Drabužinė — projektas #1031","Walk-in closet — project #1031","Ankleidezimmer — Projekt #1031","Vestidor — proyecto #1031"],"demo.j7":["TV sekcija","TV unit","TV-Möbel","Mueble de TV"],"demo.client3":["Privatus klientas","Private client","Privatkunde","Cliente particular"],
+  "mat.ldsp":["LDSP balta","White chipboard","Weiße Spanplatte","Aglomerado blanco"],"co.ex":['UAB „Pavyzdys“',"Example Ltd","Beispiel GmbH","Ejemplo S.L."],"co.demo":['UAB „Demonstracija“',"Demo Ltd","Demo GmbH","Demo S.L."],
+  "wh.p1":["38,50 €","€38.50","38,50 €","38,50 €"],"wh.p2":["29,90 €","€29.90","29,90 €","29,90 €"],"wh.p3":["9,20 €","€9.20","9,20 €","9,20 €"],"wh.p4":["64,00 €","€64.00","64,00 €","64,00 €"],"wh.p5":["112,00 €","€112.00","112,00 €","112,00 €"],
+  "kb.planned":["Planuojama","Planned","Geplant","Planificado"],"kb.progress":["Vykdoma","In progress","In Arbeit","En curso"],"kb.done":["Atlikta","Done","Erledigt","Hecho"],
+  "kb.cut":["Pjovimas","Cutting","Zuschnitt","Corte"],"kb.assembly":["Surinkimas","Assembly","Montage","Montaje"],"kb.edge":["Kraštų klijavimas","Edge banding","Kantenanleimen","Encolado de cantos"],"kb.packed":["Supakuota","Packed","Verpackt","Embalado"],"kb.shipped":["Išsiųsta","Shipped","Versendet","Enviado"],
+  "th.material":["Medžiaga","Material","Material","Material"],"th.thick":["Storis","Thick.","Stärke","Grosor"],"th.parts":["Detalių","Parts","Teile","Piezas"],"th.sheets":["Plokščių","Sheets","Platten","Tableros"],"th.eff":["Išnaud.","Yield","Ausn.","Aprov."],"th.sku":["Artikulas","SKU","Art.-Nr.","Ref."],"th.stock":["Likutis","Stock","Bestand","Stock"],"th.reserved":["Rezervuota","Reserved","Reserviert","Reservado"],"th.price":["Kaina","Price","Preis","Precio"],"th.status":["Būsena","Status","Status","Estado"],
+  "wh.ok":["Pakanka","In stock","Auf Lager","En stock"],"wh.low":["Mažėja","Low","Niedrig","Bajo"],
+  "feat.eyebrow":["Kodėl FabSuite","Why FabSuite","Warum FabSuite","Por qué FabSuite"],"feat.h2":["Sukurta ceche, ne biure","Built on the floor, not in an office","In der Werkstatt entwickelt, nicht im Büro","Creado en el taller, no en una oficina"],"feat.sub":["Kiekviena funkcija atsirado iš realių gamybos poreikių.","Every feature came from a real production need.","Jede Funktion entstand aus einem echten Produktionsbedarf.","Cada función surgió de una necesidad real de producción."],
+  "feat.f1.t":["Mažiau atliekų","Less waste","Weniger Verschnitt","Menos desperdicio"],"feat.f1.d":["Tikros formos nesting išspaudžia maksimalų plokštės išnaudojimą kiekvienam užsakymui.","True-shape nesting squeezes maximum yield from every sheet.","Echtform-Schachtelung holt aus jeder Platte die maximale Ausnutzung.","El anidado de forma real exprime el máximo aprovechamiento de cada tablero."],
+  "feat.f2.t":["Daugiakalbė sąsaja","Multilingual","Mehrsprachig","Multilingüe"],"feat.f2.d":["Visa sistema keturiomis kalbomis (LT, EN, DE, ES) — tinka tarptautinėms komandoms.","The whole system in four languages (LT, EN, DE, ES) — fit for international teams.","Das gesamte System in vier Sprachen (LT, EN, DE, ES) — ideal für internationale Teams.","Todo el sistema en cuatro idiomas (LT, EN, DE, ES) — ideal para equipos internacionales."],
+  "feat.f3.t":["Debesyje","In the cloud","In der Cloud","En la nube"],"feat.f3.d":["Duomenys saugomi saugiai debesyje (Supabase) — prieiga iš bet kurios darbo vietos.","Data stored securely in the cloud (Supabase) — access from any workstation.","Daten sicher in der Cloud gespeichert (Supabase) — Zugriff von jedem Arbeitsplatz.","Datos almacenados de forma segura en la nube (Supabase) — acceso desde cualquier puesto."],
+  "feat.f4.t":["Etiketės ir QR","Labels & QR","Etiketten & QR","Etiquetas y QR"],"feat.f4.d":["Zebra etiketės ir QR kodai detalėms — greitas sekimas visame ceche.","Zebra labels and QR codes for parts — fast tracking across the floor.","Zebra-Etiketten und QR-Codes für Teile — schnelle Verfolgung in der ganzen Werkstatt.","Etiquetas Zebra y códigos QR para piezas — seguimiento rápido en todo el taller."],
+  "feat.f5.t":["Integracijos","Integrations","Integrationen","Integraciones"],"feat.f5.d":["SWOOD, DXF, Excel ir PDF — įsilieja į esamą darbo eigą. Kitos integracijos — pagal poreikį.","SWOOD, DXF, Excel and PDF — fits your existing workflow. Other integrations on request.","SWOOD, DXF, Excel und PDF — fügt sich in Ihren Arbeitsablauf ein. Weitere Integrationen auf Anfrage.","SWOOD, DXF, Excel y PDF — se integra en tu flujo de trabajo. Otras integraciones a petición."],
+  "feat.f6.t":["Vienas sandėlis","One warehouse","Ein Lager","Un solo almacén"],"feat.f6.d":["Plokštės, atsargos ir rezervacijos bendros visiems moduliams — be dubliavimo.","Sheets, stock and reservations shared across modules — no duplication.","Platten, Bestand und Reservierungen modulübergreifend — ohne Dopplung.","Tableros, stock y reservas compartidos entre módulos — sin duplicidades."],
+  "int.eyebrow":["Integracijos","Integrations","Integrationen","Integraciones"],"int.h2":["Veikia su tuo, ką jau naudojate","Works with what you already use","Funktioniert mit dem, was Sie bereits nutzen","Funciona con lo que ya usas"],"int.sub":["Reikia kažko kito? Integracijas galime pritaikyti pagal poreikį.","Need something else? We can build integrations on request.","Brauchen Sie etwas anderes? Wir erstellen Integrationen auf Anfrage.","¿Necesitas algo más? Creamos integraciones a petición."],"int.req":["+ pagal poreikį","+ on request","+ auf Anfrage","+ a petición"],
+  "how.eyebrow":["Kaip pradėti","Getting started","Erste Schritte","Cómo empezar"],"how.h2":["Paleidimas per tris žingsnius","Up and running in three steps","In drei Schritten startklar","Listo en tres pasos"],
+  "how.s1.t":["Demo ir poreikių analizė","Demo & needs review","Demo & Bedarfsanalyse","Demo y análisis de necesidades"],"how.s1.d":["Parodome sistemą gyvai ir aptariame jūsų gamybos procesą.","We show the system live and review your production process.","Wir zeigen das System live und besprechen Ihren Produktionsprozess.","Mostramos el sistema en vivo y revisamos tu proceso de producción."],
+  "how.s2.t":["Pritaikymas ir duomenys","Setup & data","Einrichtung & Daten","Configuración y datos"],"how.s2.d":["Sukonfigūruojame vartotojus, sandėlį ir importuojame jūsų duomenis.","We configure users, stock and import your data.","Wir richten Nutzer und Lager ein und importieren Ihre Daten.","Configuramos usuarios, almacén e importamos tus datos."],
+  "how.s3.t":["Gamyba","Go live","Loslegen","En marcha"],"how.s3.d":["Komanda dirba realiu laiku — su mokymais ir palaikymu.","Your team works in real time — with training and support.","Ihr Team arbeitet in Echtzeit — mit Schulung und Support.","Tu equipo trabaja en tiempo real — con formación y soporte."],
+  "price.eyebrow":["Kainos","Pricing","Preise","Precios"],"price.h2":["Pasirinkite, ko reikia","Pick what you need","Wählen Sie, was Sie brauchen","Elige lo que necesitas"],"price.sub":["Pirkite atskirą programą arba visą sistemą. Komplekte — daugiau už mažiau.","Buy a single app or the full suite. The bundle gives more for less.","Kaufen Sie eine einzelne App oder die ganze Suite. Das Paket bietet mehr für weniger.","Compra una app individual o la suite completa. El paquete ofrece más por menos."],
+  "price.permo":["/mėn","/mo","/Mon.","/mes"],"price.bestvalue":["Geriausia vertė","Best value","Bestes Angebot","Mejor valor"],"price.buy":["Pirkti","Buy now","Jetzt kaufen","Comprar"],"price.ordemo":["arba užsisakyti demo","or book a demo","oder Demo buchen","o reservar una demo"],"price.seats5":["iki 5 vietų","up to 5 seats","bis zu 5 Plätze","hasta 5 puestos"],
+  "pp.nest.name":["Nesting","Nesting","Nesting","Nesting"],"pp.nest.l1":["Pjovimo optimizavimas (true-shape)","Cut optimization (true-shape)","Zuschnitt-Optimierung (Echtform)","Optimización de corte (forma real)"],"pp.nest.l2":["SWOOD importas, DXF į CNC","SWOOD import, DXF to CNC","SWOOD-Import, DXF an CNC","Importación SWOOD, DXF a CNC"],"pp.nest.l3":["QR / Zebra etiketės","QR / Zebra labels","QR-/Zebra-Etiketten","Etiquetas QR / Zebra"],"pp.nest.l4":["Atraižų ir likučių apskaita","Offcut & remnant tracking","Verschnitt- & Restenverwaltung","Control de recortes y restos"],"pp.nest.l5":["Iki 5 vartotojų","Up to 5 users","Bis zu 5 Nutzer","Hasta 5 usuarios"],
+  "pp.prod.name":["Gamybos valdymas","Production management","Produktionssteuerung","Gestión de producción"],"pp.prod.l1":["Projektai, užduotys, etapai","Projects, tasks, steps","Projekte, Aufgaben, Schritte","Proyectos, tareas, etapas"],"pp.prod.l2":["Kanban, Gantt, pipeline","Kanban, Gantt, pipeline","Kanban, Gantt, Pipeline","Kanban, Gantt, pipeline"],"pp.prod.l3":["Sandėlis ir medžiagų poreikis","Stock & material needs","Lager & Materialbedarf","Stock y necesidades de material"],"pp.prod.l4":["Excel importas, PDF, ataskaitos","Excel import, PDF, reports","Excel-Import, PDF, Berichte","Importación Excel, PDF, informes"],"pp.prod.l5":["Iki 5 vartotojų","Up to 5 users","Bis zu 5 Nutzer","Hasta 5 usuarios"],
+  "pp.suite.name":["Visa sistema","Full suite","Komplettpaket","Suite completa"],"pp.suite.l1":["Nesting + Gamybos valdymas","Nesting + Production management","Nesting + Produktionssteuerung","Nesting + Gestión de producción"],"pp.suite.l2":["Bendras sandėlis (tik komplekte)","Shared warehouse (bundle only)","Gemeinsames Lager (nur im Paket)","Almacén compartido (solo en paquete)"],"pp.suite.l3":["Pirmenybinis palaikymas","Priority support","Priorisierter Support","Soporte prioritario"],"pp.suite.l4":["Pagalba paleidžiant","Onboarding help","Einführungshilfe","Ayuda de incorporación"],"pp.suite.l5":["Iki 5 vartotojų","Up to 5 users","Bis zu 5 Nutzer","Hasta 5 usuarios"],
+  "price.note":["Pirkite atskirai arba komplekte. Po apmokėjimo iškart sukuriama paskyra — dirbkite tą pačią dieną. Kainos be PVM; metinis planas pigesnis.","Buy separately or bundled. Your account is created right after payment — work the same day. Prices excl. VAT; annual is cheaper.","Einzeln oder im Paket kaufen. Ihr Konto wird direkt nach der Zahlung erstellt — arbeiten Sie noch am selben Tag. Preise zzgl. MwSt.; Jahresplan günstiger.","Compra por separado o en paquete. Tu cuenta se crea justo tras el pago — empieza el mismo día. Precios sin IVA; el plan anual es más barato."],
+  "cta.h2":["Pasiruošę pradėti?","Ready to start?","Bereit loszulegen?","¿Listo para empezar?"],"cta.p":["Pasirinkite planą, susikurkite paskyrą ir dirbkite jau šiandien.","Pick a plan, create your account, and work today.","Wählen Sie einen Plan, erstellen Sie Ihr Konto und arbeiten Sie noch heute.","Elige un plan, crea tu cuenta y trabaja hoy mismo."],"cta.b1":["Rinktis planą","Choose a plan","Plan wählen","Elegir plan"],"cta.b2":["Užsisakyti demo","Book a demo","Demo buchen","Reservar demo"],
+  "con.eyebrow":["Demo","Demo","Demo","Demo"],"con.h2":["Užsisakykite nemokamą demo","Book a free demo","Kostenlose Demo buchen","Reserva una demo gratis"],"con.sub":["Norite pamatyti prieš pirkdami? Užpildykite formą — parodysime sistemą gyvai per 1 darbo dieną.","Want to see it before buying? Fill the form — we'll show it live within 1 business day.","Möchten Sie es vor dem Kauf sehen? Füllen Sie das Formular aus — wir zeigen es live innerhalb von 1 Werktag.","¿Quieres verlo antes de comprar? Rellena el formulario — lo mostramos en vivo en 1 día laborable."],"con.buy":["Pirkti iškart","Buy now","Sofort kaufen","Comprar ya"],"con.buyv":["Rinkitės planą ir pradėkite","Pick a plan and start","Plan wählen und starten","Elige un plan y empieza"],"con.email":["El. paštas","Email","E-Mail","Correo"],"con.live":["Statusas","Status","Status","Estado"],"con.livev":["Nesting ir Gamybos valdymas — jau veikia","Nesting and Production management — live now","Nesting und Produktionssteuerung — jetzt verfügbar","Nesting y Gestión de producción — ya disponibles"],
+  "form.name":["Vardas","Name","Name","Nombre"],"form.company":["Įmonė","Company","Unternehmen","Empresa"],"form.email":["El. paštas","Email","E-Mail","Correo"],"form.interest":["Dominantis produktas","Product of interest","Produkt von Interesse","Producto de interés"],"form.opt.all":["Visa sistema","Whole suite","Komplettpaket","Suite completa"],"form.opt.nest":["Nesting","Nesting","Nesting","Nesting"],"form.opt.prod":["Gamybos valdymas","Production management","Produktionssteuerung","Gestión de producción"],"form.opt.soon":["Pasiūlymai / CRM","Offers / CRM","Angebote / CRM","Presupuestos / CRM"],"form.msg":["Žinutė","Message","Nachricht","Mensaje"],"form.send":["Siųsti užklausą","Send request","Anfrage senden","Enviar solicitud"],"form.subj":["Demo užklausa","Demo request","Demo-Anfrage","Solicitud de demo"],
+  "app.nesting":["Nesting","Nesting","Nesting","Nesting"],"app.prod":["Gamybos valdymas","Production management","Produktionssteuerung","Gestión de producción"],"app.wh":["Sandėlis","Warehouse","Lager","Almacén"],
+  "foot.copy":["© 2026 FabSuite. Gamybos programinė įranga.","© 2026 FabSuite. Manufacturing software.","© 2026 FabSuite. Fertigungssoftware.","© 2026 FabSuite. Software de fabricación."]
 };
 
-let lang = localStorage.getItem("fs_lang") || "lt";
+const LANGS = ["lt","en","de","es"];
+let lang = localStorage.getItem("fs_lang"); if(!LANGS.includes(lang)) lang = "lt";
+const langIdx = () => Math.max(0, LANGS.indexOf(lang));
 const RICH = new Set(["hero.h1","proof.t"]); // entries that contain HTML
+const TITLES = {
+  lt:`${BRAND} — gamybos programinė įranga baldų ir gaminių gamykloms`,
+  en:`${BRAND} — manufacturing software for furniture & product factories`,
+  de:`${BRAND} — Fertigungssoftware für Möbel- und Produkthersteller`,
+  es:`${BRAND} — software de fabricación para fábricas de muebles y productos`
+};
 function applyLang(){
-  const i = lang==="lt"?0:1;
+  const i = langIdx();
   document.documentElement.lang = lang;
-  document.title = (i===0
-    ? `${BRAND} — gamybos programinė įranga baldų ir gaminių gamykloms`
-    : `${BRAND} — manufacturing software for furniture & product factories`);
+  document.title = TITLES[lang];
   document.querySelectorAll("[data-i18n]").forEach(el=>{
     const k = el.getAttribute("data-i18n");
     if(!I18N[k]) return;
-    const val = I18N[k][i].replace(/FabSuite/g, BRAND);
+    const arr = I18N[k];
+    const val = (arr[i] ?? arr[1] ?? arr[0]).replace(/FabSuite/g, BRAND);
     if(RICH.has(k)) el.innerHTML = val; else el.textContent = val;
   });
-  document.getElementById("langBtn").textContent = lang==="lt"?"EN":"LT";
+  document.getElementById("langSel").value = lang;
   localStorage.setItem("fs_lang", lang);
   applyPrices();
 }
-document.getElementById("langBtn").addEventListener("click",()=>{lang = lang==="lt"?"en":"lt";applyLang();});
+document.getElementById("langSel").addEventListener("change",e=>{lang = e.target.value; applyLang();});
 
-/* Prices */
+/* Prices (currency format localized: EN uses €39.50, others 39,50 €) */
 function applyPrices(){
-  const i = lang==="lt"?0:1;
-  const quote = ["Pagal pasiūlymą","By quote"][i];
-  const per=I18N["price.permo"][i];
-  const sep = (+PRICES.nest) + (+PRICES.prod);          // both apps bought separately
-  const save = sep - (+PRICES.suite);                   // bundle saving / month
+  const i = langIdx();
+  const quote = ["Pagal pasiūlymą","By quote","Auf Anfrage","Bajo presupuesto"][i];
+  const per = I18N["price.permo"][i];
+  const saveTpl = ["Sutaupote {S} €/mėn","Save €{S}/mo","Sparen Sie {S} €/Mon.","Ahorra {S} €/mes"][i];
+  const fmt = v => i===1 ? `€${v}` : `${v} €`;
+  const sep = (+PRICES.nest) + (+PRICES.prod);   // both apps bought separately
+  const save = sep - (+PRICES.suite);            // bundle saving / month
   document.querySelectorAll("[data-price]").forEach(el=>{
     const key=el.getAttribute("data-price");
     const val = PRICES[key];
     if(!val || val==="—"){ el.innerHTML = `<span style="font-size:20px">${quote}</span>`; return; }
-    const was = (key==="suite" && save>0) ? `<span class="was">${sep} €</span>` : "";
-    el.innerHTML = `${val} €<small>${per}</small>${was}`;
+    const was = (key==="suite" && save>0) ? `<span class="was">${fmt(sep)}</span>` : "";
+    el.innerHTML = `${fmt(val)}<small>${per}</small>${was}`;
   });
   document.querySelectorAll("[data-save]").forEach(el=>{
-    el.textContent = save>0 ? (i===0 ? `Sutaupote ${save} €/mėn` : `Save €${save}/mo`) : "";
+    el.textContent = save>0 ? saveTpl.replace("{S}", save) : "";
     el.style.display = save>0 ? "inline-block" : "none";
   });
 }
 
 /* Brand */
 document.querySelectorAll("[data-brand]").forEach(el=>el.textContent=BRAND);
-document.querySelectorAll("[data-brand-suffix]").forEach(el=>el.textContent=el.textContent.replace("FabSuite",BRAND));
 
 /* Theme */
 const tBtn = document.getElementById("themeBtn");
@@ -793,14 +805,14 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
 document.getElementById("demoForm").addEventListener("submit",e=>{
   e.preventDefault();
   const v=id=>document.getElementById(id).value.trim();
-  const L = lang==="lt";
-  const subj = `[${BRAND}] ${L?"Demo užklausa":"Demo request"} — ${v("f_company")||v("f_name")}`;
+  const i=langIdx(); const t=k=>I18N[k][i];
+  const subj = `[${BRAND}] ${t("form.subj")} — ${v("f_company")||v("f_name")}`;
   const body =
-    `${L?"Vardas":"Name"}: ${v("f_name")}\n`+
-    `${L?"Įmonė":"Company"}: ${v("f_company")}\n`+
-    `${L?"El. paštas":"Email"}: ${v("f_email")}\n`+
-    `${L?"Dominantis produktas":"Product of interest"}: ${document.getElementById("f_interest").value}\n\n`+
-    `${L?"Žinutė":"Message"}:\n${v("f_msg")}\n`;
+    `${t("form.name")}: ${v("f_name")}\n`+
+    `${t("form.company")}: ${v("f_company")}\n`+
+    `${t("form.email")}: ${v("f_email")}\n`+
+    `${t("form.interest")}: ${document.getElementById("f_interest").value}\n\n`+
+    `${t("form.msg")}:\n${v("f_msg")}\n`;
   window.location.href = `mailto:gervdalius@gmail.com?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
 });
 
